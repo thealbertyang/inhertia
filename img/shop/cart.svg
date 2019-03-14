@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="cart-1" width="25px" height="25px">
+    <title>Cart</title>
+    <desc>A line styled icon from Orion Icon Library.</desc>
+    <path data-name="layer2" fill="none" stroke="#202020" stroke-width='4' stroke-miterlimit="10" d="M2 6h10l10 40h32l8-24H16" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--layer1, #202020)"></path>
+    <circle data-name="layer1" cx="23" cy="54" r="4" fill="none" stroke="#202020" stroke-width='4' stroke-miterlimit="10" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--layer1, #202020)"></circle>
+    <circle data-name="layer1" cx="49" cy="54" r="4" fill="none" stroke="#202020" stroke-width='4' stroke-miterlimit="10" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--layer1, #202020)"></circle>
+  </svg>

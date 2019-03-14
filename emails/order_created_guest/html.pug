@@ -1,0 +1,444 @@
+doctype html
+html
+  head
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    title Simple Transactional Email
+    link(rel="stylesheet", href="/css/app.css", data-inline)
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css", data-inline)
+    
+    style.
+      /* -------------------------------------
+      GLOBAL RESETS
+      ------------------------------------- */
+      img {
+      border: none;
+      -ms-interpolation-mode: bicubic;
+      max-width: 100%; }
+      body {
+      background-color: #f6f6f6;
+      font-family: sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%; }
+      table {
+      border-collapse: separate;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+      width: 100%; }
+      table td {
+      font-family: sans-serif;
+      font-size: 14px;
+      vertical-align: top; }
+      /* -------------------------------------
+      BODY & CONTAINER
+      ------------------------------------- */
+      .body {
+           background-color: #ffffff;
+           width: 100%; 
+           color: #6b6b6b;
+      }
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+      .container {
+      display: block;
+      Margin: 0 auto !important;
+      /* makes it centered */
+      max-width: 650px;
+      padding: 10px;
+      width: 650px; }
+      /* This should also be a block element, so that it will fill 100% of the .container */
+      .content {
+      box-sizing: border-box;
+      display: block;
+      margin: 0 auto;
+      max-width: 650px;
+      padding: 10px; }
+      /* -------------------------------------
+      HEADER, FOOTER, MAIN
+      ------------------------------------- */
+      .main {
+      background: #ffffff;
+      border-radius: 3px;
+      width: 100%; }
+      .wrapper {
+      box-sizing: border-box;
+      padding: 20px; }
+      .content-block {
+      padding-bottom: 10px;
+      padding-top: 10px;
+      }
+      .footer {
+      clear: both;
+      margin-top: 10px;
+      text-align: center;
+      width: 100%; }
+      .footer td,
+      .footer p,
+      .footer span,
+      .footer a {
+      color: #999999;
+      font-size: 12px;
+      text-align: center; }
+      /* -------------------------------------
+      TYPOGRAPHY
+      ------------------------------------- */
+      h1,
+      h2,
+      h3,
+      h4 {
+      color: #000000;
+      font-family: sans-serif;
+      font-weight: 400;
+      line-height: 1.4;
+      margin: 0;
+      Margin-bottom: 30px; }
+      h1 {
+      font-size: 35px;
+      font-weight: 600;
+      text-align: center;
+      text-transform: capitalize; }
+      p,
+      ul,
+      ol {
+          font-family: Arial,sans-serif;
+          font-size: 17px;
+          line-height: 26px;
+          color: #525e69;
+          font-weight: normal;
+          margin: 0;
+          margin-bottom: 15px; 
+      }
+      p li,
+      ul li,
+      ol li {
+      list-style-position: inside;
+      margin-left: 5px; }
+      a {
+         color: #3498db;
+         text-decoration: underline; 
+      }
+      /* -------------------------------------
+      BUTTONS
+      ------------------------------------- */
+      .btn {
+      box-sizing: border-box;
+      width: 100%; }
+      .btn > tbody > tr > td {
+      padding-bottom: 15px; }
+      .btn table {
+      width: auto; }
+      .btn table td {
+      background-color: #ffffff;
+      border-radius: 5px;
+      text-align: center; }
+      a.btn {
+            text-decoration: none;
+      }
+      .btn a {
+      background-color: #ffffff;
+      border: solid 1px #3498db;
+      border-radius: 5px;
+      box-sizing: border-box;
+      color: #3498db;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 0;
+      padding: 12px 25px;
+      text-decoration: none;
+      text-transform: capitalize; }
+      .btn-primary table td {
+      background-color: #3498db; }
+      .btn-primary a {
+      background-color: #3498db;
+      border-color: #3498db;
+      color: #ffffff; }
+      table h1 {
+            font-family:"Times New Roman,Times,serif"; 
+            font-size: 55px; 
+            line-height: 58px; 
+            color: #5a5a5a;
+            font-weight: 600 !important;
+      }
+      table h3 {
+            font-family:"Times New Roman,Times,serif"; 
+            font-size: 35px; 
+            line-height: 38px; 
+            color: #5a5a5a;
+            font-weight: 600 !important;
+      }
+      table h4 {
+            font-family:"Times New Roman,Times,serif"; 
+            font-size: 25px; 
+            line-height: 28px; 
+            color: #5a5a5a;
+            font-weight: 600 !important;
+      }
+      table small {
+            color: #525e69 !important;
+            letter-spacing: 2px;
+            font-weight: bold !important;
+      }
+      table {
+            box-shadow: 3px 3px 3px black;
+            margin-bottom: 0 !important;
+      }      
+      table th {
+            border-top: none !important;
+            border-bottom: none !important;
+      }  
+      table.items td {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+            vertical-align: middle !important;
+      }
+      table.shipping td p {
+          font-family: Arial,sans-serif;
+          color: #888f95;
+      }
+      table.body {
+      	box-shadow: 3px 3px 3px black;
+      }
+      /* -------------------------------------
+      OTHER STYLES THAT MIGHT BE USEFUL
+      ------------------------------------- */
+      .last {
+      margin-bottom: 0; }
+      .first {
+      margin-top: 0; }
+      .align-center {
+      text-align: center; }
+      .align-right {
+      text-align: right; }
+      .align-left {
+      text-align: left; }
+      .clear {
+      clear: both; }
+      .mt0 {
+      margin-top: 0; }
+      .mb0 {
+      margin-bottom: 0; }
+      .preheader {
+      color: transparent;
+      display: none;
+      height: 0;
+      max-height: 0;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      mso-hide: all;
+      visibility: hidden;
+      width: 0; }
+      .powered-by a {
+      text-decoration: none; }
+      hr {
+      border: 0;
+      border-bottom: 1px solid #f6f6f6;
+      margin: 20px 0; }
+      /* -------------------------------------
+      RESPONSIVE AND MOBILE FRIENDLY STYLES
+      ------------------------------------- */
+      @media only screen and (max-width: 620px) {
+      table[class=body] h1 {
+      font-size: 28px !important;
+      margin-bottom: 10px !important; }
+      table[class=body] p,
+      table[class=body] ul,
+      table[class=body] ol,
+      table[class=body] td,
+      table[class=body] span,
+      table[class=body] a {
+      font-size: 16px !important; }
+      table[class=body] .wrapper,
+      table[class=body] .article {
+      padding: 10px !important; }
+      table[class=body] .content {
+      padding: 0 !important; }
+      table[class=body] .container {
+      padding: 0 !important;
+      width: 100% !important; }
+      table[class=body] .main {
+      border-left-width: 0 !important;
+      border-radius: 0 !important;
+      border-right-width: 0 !important; }
+      table[class=body] .btn table {
+      width: 100% !important; }
+      table[class=body] .btn a {
+      width: 100% !important; }
+      table[class=body] .img-responsive {
+      height: auto !important;
+      max-width: 100% !important;
+      width: auto !important; }}
+      /* -------------------------------------
+      PRESERVE THESE STYLES IN THE HEAD
+      ------------------------------------- */
+      @media all {
+      .ExternalClass {
+      width: 100%; }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+      line-height: 100%; }
+      .apple-link a {
+      color: inherit !important;
+      font-family: inherit !important;
+      font-size: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+      text-decoration: none !important; }
+      .btn-primary table td:hover {
+      background-color: #34495e !important; }
+      .btn-primary a:hover {
+      background-color: #34495e !important;
+      border-color: #34495e !important; } }
+  body
+    span.preheader This is preheader text. Some clients will show this text as a preview.
+
+    table.body(border='0', cellpadding='0', cellspacing='0')
+      tr
+        td.container
+            .content
+            // START CENTERED WHITE CONTAINER
+            table.main
+                // START MAIN CONTENT AREA
+                tr
+                    td.wrapper
+                        table(border='0', cellpadding='0', cellspacing='0')
+                            tr
+                                td(align="center")
+                                    a(href=`${url}/shop`)
+                                    img(class='col-4' src='http://inhertia.com:3000/img/shop/logo-navy.png')
+                            tr
+                                   td(align="center")
+                                    hr(class='mt-0 mb-5')
+                                    img(class='col-4 mb-5' src='http://inhertia.com:3000/img/shop/delivery.png')
+                                    h1 Arrving Shortly!
+                                    p Hi #{name}, We'd like to let you know that we have recieved your order and preparing it for shipment. Your estimated delivery date is below. 
+                                    a(class='btn btn-success rounded-0 text-center text-white my-4' href=`${url}/shop/orders/`) View Order
+                            tr
+                                td
+                                    p(class='mb-3 pb-3') 
+                                    table(class='table table-sm items')
+                                        thead
+                                            tr
+                                                th(class='border-0')
+                                        tbody
+                                          each item in items
+                                                - let itemTotal = item.price * item.quantity
+                                                tr
+                                                      td(class='text-center')
+                                                          a(href=`${url}/shop`)
+                                                              img(src=`http://inhertia.com:3000${item.images[0]}` class='pb-4' width='400px')
+                                                          br
+                                                          h3(class='mb-1')= item.title
+                                                          br
+                                                          span(style='color:#b0b3b5!important')= item.color.name 
+                                                          br
+                                                          = item.size.name
+                                                          br
+                                                          = `x${item.quantity}`
+                                                          br
+                                                          h5= `$${item.price}`
+                                                        
+                                    hr(class='mt-0 mb-0')
+                                    table(cellpadding='0', cellspacing='0')
+                                          tr
+                                            td
+                                                table(cellpadding='0', cellspacing='0')
+                                                     tr
+                                                          td(height='195px' style='background-color:#ffffff')
+                                                     tr
+                                                          td(height='85px' style='background-color:#f8f8f8!important')
+                                            td(width='90%' class='border rounded-0 p-5')
+                                                table
+                                                     tr
+                                                          td(class='text-left') SHIPPING
+                                                          td(class='text-right') $#{amount.shipping}
+                                                     tr
+                                                          td(class='text-left') DISCOUNT
+                                                          - let discounts = amount.discounts == 0 ? '--' : '- $'+amount.discounts
+                                                          td(class='text-right')= discounts                                             
+                                                     tr
+                                                          td(class='text-left') SUBTOTAL
+                                                          td(class='text-right') $#{amount.sub_total}
+                                                     tr
+                                                          td(class='text-left') TAX
+                                                          td(class='text-right') $#{amount.tax}
+                                                     tr
+                                                          td
+                                                              hr(class='border-bottom:1px solid #dedede!important')
+                                                          td
+                                                              hr(class='border-bottom:1px solid #dedede!important')
+                                                     tr
+                                                          td(class='text-left') 
+                                                              h5 TOTAL
+                                                          td(class='text-right') 
+                                                              h5 $#{amount.total}
+                                            td
+                                                table(cellpadding='0', cellspacing='0')
+                                                     tr
+                                                          td(height='195px' style='background-color:#ffffff')
+                                                     tr
+                                                          td(height='85px' style='background-color:#f8f8f8!important')
+                                    table(class='bg-light p-5 shipping')
+                                          tr
+                                               td(class='text-center' colspan='2') 
+                                                    h4(class='mb-3') Shipping details
+                                                    p It may take up to 24 hours for your tracking info to appear.
+                                                    a(href='${url}/shop/customerService/deliveryAndShipping')
+                                                    hr(style='border-bottom: 1px solid #e0e0e0;' class='my-5')
+                                          tr
+                                               td(width='50%')
+                                                    small DATE ORDERED
+                                                    p(class='mt-2 mb-4') #{date_ordered}
+                                               td(width='50%')
+                                                    small ORDER NUMBER
+                                                    p(class='mt-2 mb-4') #{order_id}
+                                          tr
+                                               td(width='50%')
+                                                    small SHIPPING ADDRESS
+                                                    p(class='mt-2 mb-4') #{shipping.first_name} #{shipping.last_name}
+                                                        br 
+                                                        | #{shipping.line1}
+                                                        br 
+                                                        | #{shipping.line2}
+                                                        br 
+                                                        |  #{shipping.city}, #{shipping.state} #{shipping.postal_code}
+                                               td(width='50%')
+                                                    small PAYMENT
+                                                    p(class='mt-2 mb-4') Ending in 2479
+                                          tr
+                                               td(width='50%')
+                                                    small TRACKING NUMBER
+                                                    p(class='mt-2 mb-4') #{order_id}
+                                               td(width='50%')
+                                    table(class='p-5 shipping')
+                                          tr
+                                               td(class='text-center' colspan='2') 
+                                                    h4(class='mb-3') Need help?
+                                                    p If you need support with your order, please create a support ticket under your orders or contact support@inhertia.com and we will respond within 24 hours.
+                                                    a(href='${url}/shop/customerService/deliveryAndShipping')
+                                                    hr(style='border-bottom: 1px solid #e0e0e0;' class='my-5')
+                                          tr
+                                               td(width='50%')
+                                               td(width='50%')
+                                    a(class='btn btn-success rounded-0 text-center text-white my-4' href=`${url}/shop/orders/`) View Orders
+            // END MAIN CONTENT AREA
+            // START FOOTER
+            .footer
+                table(border='0', cellpadding='0', cellspacing='0')
+                    tr
+                        td.content-block
+                            span.apple-link Inhertia Clothing Brand - Huntington Beach CA 92647
+                            br
+                        | .
+                        // END FOOTER
+                        // END CENTERED WHITE CONTAINER

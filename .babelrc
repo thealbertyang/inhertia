@@ -1,0 +1,19 @@
+{
+  "presets": [
+    "env",
+    "react",
+    "stage-2"
+  ],
+  
+  "plugins": [
+    "transform-decorators-legacy", "transform-class-properties", "universal-import", "babel-plugin-universal-import", "syntax-dynamic-import", 
+  ],
+  
+  "env": {
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
+    }
+  }
+}

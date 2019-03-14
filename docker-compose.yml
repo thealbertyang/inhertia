@@ -1,0 +1,20 @@
+version: '2'
+services:
+  mongodb:
+    mem_limit: 20000000m
+    image: "mongo"
+    ports:
+     - "27017:27017"
+  frontend:
+    mem_limit: 20000000m
+    build: .
+    environment:       
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - ./usr/src/app/node_modules
+    depends_on:
+      - mongodb

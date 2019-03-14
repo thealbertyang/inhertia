@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://use.fontawesome.com/releases/v5.7.2/css/all.css');
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
+$theme-colors: (
+  primary: #5a1ce9
+);
+
+$link-color: darken(#5a1ce9, 6.5%);
+$text-muted: #9a9a9a;
+
+@import "~bootstrap/scss/bootstrap";
+@import "./graphikweb";
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500|Gothic+A1:400,500,600|Raleway|Roboto:300,400,500,600|Lato|Montserrat:200,300,400,500,600|Cedarville+Cursive');
+
+$quicksand-font-stack: 'Quicksand', serif;
+$roboto-font-stack: 'Roboto', serif;
+$graphik-font-stack: 'Graphik', serif;
+
+/*
+
+Reset
+
+*/
+
+html,
+body,
+#root {
+	height: 100%;
+  font-family: $graphik-font-stack;
+}
+
+/*
+
+	Utilities
+
+*/
+
+
+/*
+
+Typography
+
+*/
+
+p {
+  color: #717171;
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+h1 {
+	font-family: $graphik-font-stack;
+	font-size: 5.5rem;
+}
+
+h2 {
+	font-family: $graphik-font-stack;
+	font-size: 3.75rem;
+}
+
+h3 {
+	font-family: $graphik-font-stack;
+	font-size: 3rem;
+}
+
+h4 {
+	font-family: $graphik-font-stack;
+	font-size: 2.125rem;
+}
+
+h5 {
+	font-family: $graphik-font-stack;
+	font-size: 1.5rem;
+}
+
+h6 {
+	font-family: $graphik-font-stack;
+	font-size: 1.25rem;
+}
+
+.overline {
+	text-transform: uppercase;
+	font-size: 1rem;
+	letter-spacing: 0.09375rem;
+  font-family: $quicksand-font-stack;
+  font-weight: 500;
+}
+
+/*
+
+  Navbar
+
+*/
+
+.navbar {
+  z-index: 100;
+}
+
+.navbar nav a {
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+	&:hover {
+			text-decoration: none;
+	}
+}
+
+.navbar-brand {
+	text-transform: uppercase;
+	letter-spacing: 5px;
+
+  a {
+    font-family: $quicksand-font-stack;
+    font-weight: 500;
+    color: #333333;
+  }
+}
+
+/*
+
+	Page
+
+*/
+
+.page {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1;
+	min-height: 100%;
+}
+
+/*
+
+  Page Admin
+
+*/
+
+.page-admin .sidebar {
+  border-right: 1px solid rgba(0,0,0,.12);
+  width: 260px;
+  background-color: #242939;
+  color: white;
+
+  small {
+    color: #b0bad8;
+  }
+
+  i {
+    font-size: 1.25rem;
+    color: #434d6b;
+    margin-right: 0.25rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    color: darken($white, 26%);
+    padding: 0.5rem 0rem;
+    font-size: 0.9rem;
+  }
+
+  .navbar-brand a {
+    color: white;
+  }
+
+
+}
+
+/*
+
+  Components
+
+*/
+
+.header-tabs {
+  &.nav-tabs .nav-item.show .nav-link, &.nav-tabs .nav-link.active {
+    color: #12263f;
+    background-color: transparent;
+    border-color: transparent transparent #2c7be5;
+  }
+}
+
+/*
+
+	Input
+
+*/
+
+label {
+  color: #8a8a8a;
+}
+
+.btn {
+  font-family: $graphik-font-stack;
+}
+
+.btn-lg {
+  font-size: 1rem !important;
+  letter-spacing: 2px;
+  font-size: 1.2rem;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
