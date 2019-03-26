@@ -15,15 +15,7 @@ import { FORM_ERROR } from "final-form"
 import { Form, Field } from 'react-final-form'
 
 
-const load = async () => {
-	let model = await fetchModel()
 
-	if(model.response === 200){
-	  return {
-			...model.data
-	  }
-	}
-}
 
 const fetchModel = async (id) => {
 	return await fetchData(`/api/setting`)
@@ -55,9 +47,19 @@ export default class Edit extends React.Component {
 		let { base, page, method, params } = getLocation(location)
 
 		this.setState({ loading: true })
-	     const data = await load()
+	     const data = await this.load()
 	     this.setState({ loading: false, data })
 
+	}
+
+	load = async () => {
+		let model = await fetchModel()
+
+		if(model.response === 200){
+		  return {
+				...model.data
+		  }
+		}
 	}
 
 	resetSettings = async () => {
@@ -88,6 +90,9 @@ export default class Edit extends React.Component {
 
 		let backup = await fetchData('/api/settings/backup')
 		if(backup.response == 200){
+			this.setState({ loading: true })
+				 const data = await this.load()
+				 this.setState({ loading: false, data })
 			Messages.set('settings', { message: 'Backed up.', type: 'success' }, dispatch)
 		}
 	}

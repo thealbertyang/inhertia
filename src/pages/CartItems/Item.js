@@ -18,13 +18,13 @@ export default class Item extends React.Component {
 	}
 
 	render(){
-		let { _id, fields, name, index, title, slug, color, size, price, total } = this.props
+		let { _id, fields, name, index, title, slug, color, size, price, total, image } = this.props
 
 		return (
 			<div className='row py-5 border-top'>
 				<div className='col-2'>
 					<a href={`/product/${slug}`}>
-						<img src='/img/admin/uploads/41025693_025_2.jpg' className={`img-fluid`}/>
+						<img src={fields.value[index].images[0]} className={`img-fluid`}/>
 					</a>
 				</div>
 				<div className='col-3 d-flex flex-column justify-content-center'>
@@ -51,6 +51,7 @@ export default class Item extends React.Component {
 								if(value !== previous){
 									Cart.updateItem({ id: _id, size, color, quantity: value })
 									Cart.loadAmounts(this.props.dispatch)
+									Cart.loadItems(this.props.dispatch)
 								}
             }}
           </OnChange>

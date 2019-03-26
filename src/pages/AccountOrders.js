@@ -38,11 +38,9 @@ export default class AccountOrders extends React.Component {
 		let id = method
 
 		return [
-		<div className={`shop page page-orders`}>
-			<Header/>
-			<div className='container my-5 py-5' style={{ maxWidth: '1350px' }}>
+			<div className='container' style={{ maxWidth: '1350px' }}>
 				<div className="row">
-					<div className='col-12 mb-5' style={{ color: '#5c5c5f' }}>
+					<div className='col-12 mb-5'>
 						{typeof id !== 'undefined' ?
 							(
 								<Order/>
@@ -55,7 +53,6 @@ export default class AccountOrders extends React.Component {
 					</div>
 				</div>
 			</div>
-		</div>
 		]
 	}
 

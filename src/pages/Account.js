@@ -8,6 +8,7 @@ import Footer from '../components/Page/Footer'
 
 import Overline from '../components/Typography/Overline'
 
+import { fetchData, postData } from '../utils'
 import { getLocation, redirect } from '../actions/index'
 import * as User from '../actions/user'
 
@@ -41,18 +42,6 @@ export default class Account extends React.Component {
 	    }
 	}
 
-	resendVerifyEmail = async (e) => {
-		e.preventDefault()
-
-		let { props } = this
-		let { forms, user, dispatch } = props
-		let resend = await fetchData(`/api/user/resendVerifyEmail/${user.verifyEmail}/${user.email}`)
-		if(resend.response === 200){
-			console.log('resend')
-			User.authToken({ dispatch })
-		}
-	}
-
 	render() {
 		let { props } = this
 		let { user, location, dispatch } = props
@@ -66,23 +55,6 @@ export default class Account extends React.Component {
 			<Section>
 				<div className={`container`}>
 					<div className={`row`}>
-						<div className={`col-12`}>
-							{user && user.verifyEmail !== 'verified' && (
-								<div className={`card mb-5`}>
-									<div className='card-body'>
-										<div className='row'>
-											<div className='col-8'>
-												Please verify your email address to continue.
-											</div>
-											<div className='col-4 text-right'>
-												Trouble finding email? <a href='#' onClick={(e)=>this.resendVerifyEmail(e)}>Resend link</a>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							)}
-						</div>
 						<div className={`col-md-4 col-sm-12`}>
 							<div className='card border-primary mb-4'>
 								<div className='card-body'>
@@ -103,9 +75,6 @@ export default class Account extends React.Component {
 									</li>
 									<li className="list-group-item">
 										<a className={`nav-link px-0 rounded-0 ${(page == 'wishlist') && 'active'}`} href="/account/wishlist">Wishlist</a>
-									</li>
-									<li className="list-group-item">
-										<a className={`nav-link px-0 rounded-0 ${(page == 'support') && 'active'}`} href="/account/support">Support</a>
 									</li>
 								</ul>
 							</div>

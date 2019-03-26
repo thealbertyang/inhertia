@@ -58,9 +58,9 @@ class CheckoutForm extends React.Component {
     return (
       <form onSubmit={e=>e.preventDefault() } className={`row`}>
 
-        <CardSection onBlur={(e)=>this.handleSubmit(e)} />
+        <CardSection onChange={(e)=>this.handleSubmit(e)} />
           <div className="col-12 text-right">
-            {this.props.cart && this.props.cart.payment && this.props.cart.payment.token ? 'Loaded' : 'Not Loaded'}
+            {this.props.cart && this.props.cart.token ? 'Loaded' : 'Not Loaded'}
           </div>
       </form>
     );

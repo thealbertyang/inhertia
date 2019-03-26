@@ -454,7 +454,7 @@ export async function create(req, res, next) {
 export function remove(req, res, next){
   Settings.deleteOne({}, function (error, model) {
       if (error || !model) {
-        return res.status(400).json({ status: 'error', response: 401, message: 'Error with model delete. '+error})
+        return res.status(400).json({ status: 'error', response: 400, message: 'Error with model delete. '+error})
       } else {
         return res.status(200).json({ status: 'success', response: 200, message: 'Success with delete.'})
       }

@@ -1,5 +1,6 @@
 import express from 'express'
 import * as UserController from '../controllers/user.controller';
+import * as CustomerController from '../controllers/customer.controller';
 var router = express.Router();
 
 router.route('/users/').get(UserController.getAll);
@@ -21,8 +22,17 @@ router.route('/user/resetPassword').post(UserController.resetPassword)
 router.route('/user/verifyEmail/:token').get(UserController.verifyEmail)
 router.route('/user/resendVerifyEmail/:token/:email').get(UserController.resendVerifyEmail)
 
+router.route('/user/customer/shipping/primary/:id').post(CustomerController.updateCustomerPrimaryShipping);
+router.route('/user/customer/shipping/update/:id').post(CustomerController.updateCustomerShipping);
+router.route('/user/customer/shipping/delete/:id').post(CustomerController.deleteCustomerShipping);
 
+router.route('/user/customer/payment/primary/:id').post(CustomerController.updateCustomerPrimaryPayment);
+router.route('/user/customer/payment/create/:id').post(CustomerController.createCustomerPayment);
+router.route('/user/customer/payment/delete/:id').post(CustomerController.deleteCustomerPayment);
+
+router.route('/user/customer/wishlist/:id').get(CustomerController.getCustomerWishlist);
+router.route('/user/customer/wishlist/push/:id').post(CustomerController.pushCustomerWishlist);
+router.route('/user/customer/wishlist/pull/:id').post(CustomerController.pullCustomerWishlist);
+router.route('/user/customer/wishlist/delete/:id').delete(CustomerController.deleteCustomerWishlist);
 
 export default router;
-
-

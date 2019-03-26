@@ -16,10 +16,10 @@ const Card = ({ url, ratings, title, images, price, className}) =>
     </a>
     <div className="card-body p-0 mt-3">
       <h6 className="card-title mb-1">{title ? title : 'Blue Lacy Dress'}</h6>
-      {getRatings(ratings) ? <Ratings size={`small`}/> : null}
+      {getRatings(ratings) ? <Ratings size={`small`} ratings={ratings} /> : null}
       <p className="card-subtitle text-muted mb-3">${price}</p>
       <div className='mt-2'>
-        <a href="#" className="card-link" onClick={()=>alert(  getRatings(ratings) )}>
+        <a href={getUrl(url)} className="card-link">
           <i className='material-icons'>add_shopping_cart</i>
         </a>
         <a href="#" className="card-link">
@@ -40,11 +40,9 @@ const getUrl = url =>
   : '#'
 
 const getRatings = ratings =>
-  (typeof ratings === undefined || ratings === 'hidden')
+  (typeof ratings === undefined)
   ? false
-  : (ratings == 'visible'
-    ? true
-    : false)
+  : true
 
 
 export default Card

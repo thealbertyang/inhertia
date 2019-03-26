@@ -6,8 +6,6 @@ import { getLocation } from '../actions/index'
 import Sidebar from './Support/Sidebar'
 
 import Clothing from './SupportSizeGuide/Clothing'
-import JeansAndTrousers from './SupportSizeGuide/JeansAndTrousers'
-import Shoes from './SupportSizeGuide/Shoes'
 
 @connect((store)=>{
 	return {
@@ -37,8 +35,6 @@ export default class Index extends React.Component {
 					</div>
 					<div className='col-md-8 col-sm-12'>
 						{(typeof method === 'undefined' || !method || method === 'clothing') && <Clothing/>}
-						{method === 'jeansAndTrousers' && <JeansAndTrousers/>}
-						{method === 'shoes' && <Shoes/>}
 					</div>
 				</div>
 			</div>

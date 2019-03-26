@@ -7,8 +7,8 @@ class CardSection extends React.Component {
     return (
     	<div className={`form-group col-12`}>
     		<label>Payment Details</label>
-    		<CardElement style={{base: {fontSize: '18px'}}} className='form-control' onBlur={(e)=>{this.props.onBlur(e); console.log('this.props', this.props); }}/>
-     	</div> 
+    		<CardElement style={{base: {fontSize: '18px'}}} className='form-control' onChange={(e)=>{this.props.onChange(e); console.log('this.props', this.props); }}/>
+     	</div>
     );
   }
 };

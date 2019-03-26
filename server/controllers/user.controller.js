@@ -13,10 +13,13 @@ import mg from 'nodemailer-mailgun-transport'
 import Email from 'email-templates'
 import formidable from 'formidable'
 const fs = require('fs');
+import { Stripe } from 'stripe'
+
+let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
 
 export function getByPagination(req, res) {
 
- User.paginate({}, { page: Number(req.params.page), limit: Number(req.params.limit) }, function(err, result) {
+ User.paginate({}, {sort: { date: -1 }, page: Number(req.params.page), limit: Number(req.params.limit) }, function(err, result) {
   // result.docs
   // result.total
   // result.limit - 10
@@ -32,8 +35,8 @@ export function getByPagination(req, res) {
 }
 
 export function search(req, res, next) {
-
-  User.paginate({ $text: { $search: req.params.term }}, { page: Number(req.params.page), limit: Number(req.params.limit) }, function(err, result) {
+  //if user term match id and is Found else search textt
+  User.paginate({ $text: { $search: req.params.term }}, { sort: { date: -1 }, page: Number(req.params.page), limit: Number(req.params.limit) }, function(err, result) {
   // result.docs
   // result.total
   // result.limit - 10
@@ -90,9 +93,12 @@ export function authToken(req, res, next) {
                 if(!_.isEmpty(user.roles)){
 
                   if(_.includes(user.roles, 'customer')){
-                    user.customer = await Customer.findOne({ user_id: user._id }).lean().exec((error, customer)=>{
+                    user.customer = await Customer.findOne({ user_id: user._id }).lean().exec(async (error, customer)=>{
                       return customer
                     })
+                    if(user.customer.stripe_customer_id){
+                      user.customer.stripe_customer = await stripe.customers.retrieve(user.customer.stripe_customer_id)
+                    }
                   }
 
                   if(_.includes(user.roles, 'guest')){
@@ -270,7 +276,7 @@ export function resendVerifyEmail(req, res, next) {
 
           let auth = {
             auth: {
-              api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
+              api_key: 'key-040c7266fbe55eb75787645fb72165d2',
               domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
             },
           }
@@ -481,8 +487,6 @@ export function getAll(req, res) {
   });
 }
 
-
-
 export function getOne(req, res, next){
   User.findById(req.params.id, async (error, user) => {
     if (error || !user) {
@@ -492,7 +496,14 @@ export function getOne(req, res, next){
       if(!_.isEmpty(user.roles)){
 
         if(_.includes(user.roles, 'customer')){
-          user.customer = await Customer.findOne({ user_id: user._id }).lean().exec((error, customer)=>{
+          user.customer = await Customer.findOne({ user_id: user._id }).lean().exec(async (error, customer)=>{
+            console.log('what is it then', customer)
+
+            if(customer_id){
+              customer.stripe_customer = await stripe.customers.retrieve(customer.stripe_customer_id)
+              console.log('what is it then', customer.stripe_customer)
+            }
+
             return customer
           })
         }
@@ -556,7 +567,7 @@ export function register(req, res, next) {
             User.create({ ...fields, roles: ['admin'], verifyEmail: jwtToken }, async function (error, user) {
               if (error) {
                 if(error.code == 11000){
-                  return res.status(409).json({ status: 'error', message: 'Duplicate model.', response: 409, data: {} })
+                  return res.status(409).json({ status: 'error', message: 'The username or email is already taken.', response: 409, data: {} })
                 }
                 let inputs = _.mapValues(fields, v=>({ value: v }))
                 console.log('errors', error.errors)
@@ -666,9 +677,6 @@ export function create(req, res, next) {
             let inputs = _.mapValues(fields, v=>({ value: v }))
             return res.status(400).json({ status: 'error', message: 'Passwords do not match.', response: 400, data: { ...inputs, password: { value: '', error: 'Passwords do not match.' }, password_confirm: { value: '', error: '\xa0' } }})
           }
-
-          bcrypt.hash(fields.password, 10, function(err, hash){
-            console.log('fields2', fields, hash)
             /*
 
               What kind of user and with what role?
@@ -685,10 +693,15 @@ export function create(req, res, next) {
               roles: fields.roles,
               verifyEmail: 'verified',
             }
+
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(userFields.password, salt);
+            userFields.password = hash
+
             User.create({ ...userFields }, function (error, user) {
               if (error) {
                 if(error.code == 11000){
-                  return res.status(409).json({ status: 'error', message: 'Duplicate model.', response: 409, data: {} })
+                  return res.status(409).json({ status: 'error', message: 'This username or email is already taken.', response: 409, data: {} })
                 }
                 let inputs = _.mapValues(fields, v=>({ value: v }))
                 console.log('errors', error.errors)
@@ -699,12 +712,12 @@ export function create(req, res, next) {
             })
           })
 
-        })
+
   }
 
 
 
-export function update(req, res, next){
+export async function update(req, res, next){
   console.log('DID WE GET INB HERE DOE')
         var form = new formidable.IncomingForm(),
             files = [],
@@ -771,10 +784,16 @@ export function update(req, res, next){
               let inputs = _.mapValues(fields, v=>({ value: v }))
               return res.status(400).json({ status: 'error', message: 'Passwords do not match.', response: 400, data: { ...inputs, password: { value: '', error: 'Passwords do not match.' }, password_confirm: { value: '', error: '\xa0' } }})
             }
+            console.log('HASG b4')
 
-            bcrypt.hash(userFields.password, 10, function (err, hash){
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(userFields.password, salt);
+
+
               userFields.password = hash
-            })
+
+            console.log('HASG a4', hash)
+
 
           }
           else if(!userFields.password || !userFields.password_confirm){

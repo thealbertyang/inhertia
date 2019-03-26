@@ -6,7 +6,7 @@ html
     title Simple Transactional Email
     link(rel="stylesheet", href="/css/app.css", data-inline)
     link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css", data-inline)
-    
+
     style.
       /* -------------------------------------
       GLOBAL RESETS
@@ -39,7 +39,7 @@ html
       ------------------------------------- */
       .body {
            background-color: #ffffff;
-           width: 100%; 
+           width: 100%;
            color: #6b6b6b;
       }
       /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
@@ -110,7 +110,7 @@ html
           color: #525e69;
           font-weight: normal;
           margin: 0;
-          margin-bottom: 15px; 
+          margin-bottom: 15px;
       }
       p li,
       ul li,
@@ -119,7 +119,7 @@ html
       margin-left: 5px; }
       a {
          color: #3498db;
-         text-decoration: underline; 
+         text-decoration: underline;
       }
       /* -------------------------------------
       BUTTONS
@@ -159,23 +159,23 @@ html
       border-color: #3498db;
       color: #ffffff; }
       table h1 {
-            font-family:"Times New Roman,Times,serif"; 
-            font-size: 55px; 
-            line-height: 58px; 
+            font-family:"Times New Roman,Times,serif";
+            font-size: 55px;
+            line-height: 58px;
             color: #5a5a5a;
             font-weight: 600 !important;
       }
       table h3 {
-            font-family:"Times New Roman,Times,serif"; 
-            font-size: 35px; 
-            line-height: 38px; 
+            font-family:"Times New Roman,Times,serif";
+            font-size: 35px;
+            line-height: 38px;
             color: #5a5a5a;
             font-weight: 600 !important;
       }
       table h4 {
-            font-family:"Times New Roman,Times,serif"; 
-            font-size: 25px; 
-            line-height: 28px; 
+            font-family:"Times New Roman,Times,serif";
+            font-size: 25px;
+            line-height: 28px;
             color: #5a5a5a;
             font-weight: 600 !important;
       }
@@ -187,11 +187,11 @@ html
       table {
             box-shadow: 3px 3px 3px black;
             margin-bottom: 0 !important;
-      }      
+      }
       table th {
             border-top: none !important;
             border-bottom: none !important;
-      }  
+      }
       table.items td {
             padding-top: 2rem !important;
             padding-bottom: 2rem !important;
@@ -321,11 +321,11 @@ html
                                     hr(class='mt-0 mb-5')
                                     img(class='col-4 mb-5' src='http://inhertia.com:3000/img/shop/delivery.png')
                                     h1 Arrving Shortly!
-                                    p Hi #{name}, We'd like to let you know that we have recieved your order and preparing it for shipment. Your estimated delivery date is below. 
+                                    p Hi #{name}, We'd like to let you know that we have recieved your order and preparing it for shipment. Your estimated delivery date is below.
                                     a(class='btn btn-success rounded-0 text-center text-white my-4' href=`${url}/shop/orders/`) View Order
                             tr
                                 td
-                                    p(class='mb-3 pb-3') 
+                                    p(class='mb-3 pb-3')
                                     table(class='table table-sm items')
                                         thead
                                             tr
@@ -340,14 +340,14 @@ html
                                                           br
                                                           h3(class='mb-1')= item.title
                                                           br
-                                                          span(style='color:#b0b3b5!important')= item.color.name 
+                                                          span(style='color:#b0b3b5!important')= item.color
                                                           br
                                                           = item.size.name
                                                           br
                                                           = `x${item.quantity}`
                                                           br
                                                           h5= `$${item.price}`
-                                                        
+
                                     hr(class='mt-0 mb-0')
                                     table(cellpadding='0', cellspacing='0')
                                           tr
@@ -365,7 +365,7 @@ html
                                                      tr
                                                           td(class='text-left') DISCOUNT
                                                           - let discounts = amount.discounts == 0 ? '--' : '- $'+amount.discounts
-                                                          td(class='text-right')= discounts                                             
+                                                          td(class='text-right')= discounts
                                                      tr
                                                           td(class='text-left') SUBTOTAL
                                                           td(class='text-right') $#{amount.sub_total}
@@ -378,9 +378,9 @@ html
                                                           td
                                                               hr(class='border-bottom:1px solid #dedede!important')
                                                      tr
-                                                          td(class='text-left') 
+                                                          td(class='text-left')
                                                               h5 TOTAL
-                                                          td(class='text-right') 
+                                                          td(class='text-right')
                                                               h5 $#{amount.total}
                                             td
                                                 table(cellpadding='0', cellspacing='0')
@@ -390,7 +390,7 @@ html
                                                           td(height='85px' style='background-color:#f8f8f8!important')
                                     table(class='bg-light p-5 shipping')
                                           tr
-                                               td(class='text-center' colspan='2') 
+                                               td(class='text-center' colspan='2')
                                                     h4(class='mb-3') Shipping details
                                                     p It may take up to 24 hours for your tracking info to appear.
                                                     a(href='${url}/shop/customerService/deliveryAndShipping')
@@ -406,11 +406,11 @@ html
                                                td(width='50%')
                                                     small SHIPPING ADDRESS
                                                     p(class='mt-2 mb-4') #{shipping.first_name} #{shipping.last_name}
-                                                        br 
+                                                        br
                                                         | #{shipping.line1}
-                                                        br 
+                                                        br
                                                         | #{shipping.line2}
-                                                        br 
+                                                        br
                                                         |  #{shipping.city}, #{shipping.state} #{shipping.postal_code}
                                                td(width='50%')
                                                     small PAYMENT
@@ -422,7 +422,7 @@ html
                                                td(width='50%')
                                     table(class='p-5 shipping')
                                           tr
-                                               td(class='text-center' colspan='2') 
+                                               td(class='text-center' colspan='2')
                                                     h4(class='mb-3') Need help?
                                                     p If you need support with your order, please create a support ticket under your orders or contact support@inhertia.com and we will respond within 24 hours.
                                                     a(href='${url}/shop/customerService/deliveryAndShipping')

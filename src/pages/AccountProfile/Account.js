@@ -5,6 +5,7 @@ import * as _ from 'lodash'
 import Card from '../../components/Page/Card'
 import Footer from '../../components/Page/Footer'
 import Navbar from '../../components/Page/Navbar'
+import ImageUpload from '../../components/Form/ImageUpload'
 import { Form, Field } from 'react-final-form'
 import { FORM_ERROR } from "final-form"
 
@@ -104,6 +105,17 @@ export default class AccountProfile extends React.Component {
                     <div className={`col-12`}>
           						{submitError && submitError}
           					</div>
+										<div className='form-group col-6'>
+                      <Field
+                          name="avatar"
+                          component={ImageUpload}
+                          fullWidth
+                          margin="normal"
+                          label="Avatar Upload"
+                        />
+          					</div>
+										<div className='form-group col-6'>
+                    </div>
 										<div className='form-group col-6'>
 											<label>First Name</label>
 											<Field

@@ -51,7 +51,7 @@ export default class Index extends React.Component {
 			<div className='container'>
 				<div className='row'>
 					<div className="col-12 col-md-8">
-					<h2 className='font-weight-light'>Items</h2>
+					<h3 className='font-weight-light'>Items</h3>
 						<Form
 							initialValues={this.state.data}
 							mutators={{
@@ -70,23 +70,26 @@ export default class Index extends React.Component {
 										<div className='row pb-2'>
 											{!_.isEmpty(cart.items) ? [
 												<div className='col-5'>
-													<h6 className='text-muted'>Name</h6>
+													<p className='text-muted mb-0'>Name</p>
 												</div>,
 												<div className='col-2 d-flex flex-column justify-content-center'>
-													<h6 className='text-muted'>Price</h6>
+													<p className='text-muted mb-0'>Price</p>
 												</div>,
 												<div className='col-2 d-flex flex-column justify-content-center'>
-													<h6 className='text-muted'>Qty</h6>
+													<p className='text-muted mb-0'>Qty</p>
 												</div>,
 												<div className='col-2 d-flex flex-column justify-content-center'>
-													<h6 className='text-muted'>Total</h6>
+													<p className='text-muted mb-0'>Total</p>
 												</div>,
 												<div className='col-1 d-flex flex-column justify-content-center'>
 
 												</div>
 											]
 											: <div className='col-5'>
-													<h6 className="text-muted">There are no items in the cart.</h6>
+													<h6 className="text-muted mb-4">There are no items in the cart.</h6>
+													<a className="btn btn-primary d-flex align-items-center justify-content-center text-uppercase btn-block btn-lg shadow" href="/collection">
+														<i class="material-icons mr-2">shopping_cart</i> Shop Collection
+													</a>
 												</div>}
 										</div>
 

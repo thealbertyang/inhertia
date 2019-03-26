@@ -20,11 +20,14 @@ export default class Logout extends React.Component {
 		super(props)
 	}
 
-	componentDidMount = () => {
+	componentDidMount = async () => {
 		let { props } = this
 		let { dispatch } = props
-		User.logout(dispatch)
-		dispatch(redirect('LOGIN'))
+		await User.logout(dispatch)
+		await User.setUser({}, dispatch)
+
+		console.log('this USER IS:??', this.props)
+	//	window.href.location = '/login'
 	}
 
 	render(){

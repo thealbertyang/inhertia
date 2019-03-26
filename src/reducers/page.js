@@ -15,6 +15,7 @@ const components = {
   GUEST: 'Guest',
   LOOKBOOK: 'Lookbook',
   SUPPORT: 'Support',
+  SETUP: 'Setup',
   TYPOGRAPHY: 'Typography',
   FORGOTPASSWORD: 'ForgotPassword',
   RESETPASSWORD: 'ResetPassword',

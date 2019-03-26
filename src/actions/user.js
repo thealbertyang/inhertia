@@ -79,9 +79,10 @@ export const authToken = async ({ token, dispatch }) => {
       	}
 }
 
-export const logout = (dispatch) => {
+export const logout = async (dispatch) => {
 	let cookie = new Cookie()
 	cookie.remove('jwtToken', { path: '/'})
+	await dispatch({ type: 'USER_LOGOUT' })
 }
 
 export const verifyEmail = async (token) => {
@@ -111,8 +112,8 @@ export const isEmailVerified = (user) => {
 	return isEmailVerified
 }
 
-export const hasRole = (role) => {
+export const hasRole = (user, role) => {
 	//look at cookie role ['admin', 'member']
-	let userCookie = module.exports.fetchUserCookie()
-	return !_.isEmpty(userCookie) ? userCookie.roles.includes(role) : false
+	//let userCookie = module.exports.fetchUserCookie()
+	return user.roles && user.roles.includes(role)
 }

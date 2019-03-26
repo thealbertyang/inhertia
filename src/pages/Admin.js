@@ -86,7 +86,7 @@ export default class Admin extends React.Component {
 					<div className={`container-fluid d-flex flex-fill`}>
 						<div className={`row flex-fill`}>
 							<Sidebar base={ base } />
-							<div className={`col-10 bg-light`}>
+							<div className={`col-11 col-md-10 bg-light`}>
 								<Navbar/>
 								{typeof page === 'undefined' && <Component page="AdminDashboard"/>}
 								{page === 'campaigns' && <Component page="AdminCampaigns"/>}
@@ -96,12 +96,9 @@ export default class Admin extends React.Component {
 								{page === 'products' && <Component page="AdminProducts"/>}
 								{page === 'productCategories' && <Component page="AdminProductCategories"/>}
 								{page === 'productReviews' && <Component page="AdminProductReviews"/>}
-								{page === 'profile' && <Component page="AdminProfile"/>}
-								{page === 'reports' && <Component page="AdminReports"/>}
 								{page === 'settings' && <Component page="AdminSettings"/>}
 								{page === 'support' && <Component page="AdminSupport"/>}
 								{page === 'users' && <Component page="AdminUsers"/>}
-								{page === 'usersTwo' && <Component page="AdminUsersTwo"/>}
 							</div>
 						</div>
 					</div>

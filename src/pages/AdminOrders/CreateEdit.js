@@ -11,12 +11,13 @@ import { Form, Field } from 'react-final-form'
 
 import { fetchData, postData } from '../../utils'
 import { getLocation, setForm } from '../../actions/index'
-import Models from '../../actions/models'
+import * as Messages from '../../actions/messages'
 
 @connect((store)=>{
 	return {
 		forms: store.forms,
 		models: store.models,
+		messages: store.messages,
 		location: store.location,
 	}
 })
@@ -63,11 +64,11 @@ export default class CreateEdit extends React.Component {
     if(create.response === 200){
         this.props.dispatch(redirect('ADMIN', page))
     }
-    else if(create.response === 409){
-        return formMessage('danger', 'Duplicate User.')
+		else if(create.response === 409){
+      Messages.set('orders', { message: 'Duplicate Product.', type: 'danger' }, this.props.dispatch)
     }
     else {
-        return formMessage('danger', 'Updating Failed.')
+      Messages.set('orders', { message: 'Creating Failed.', type: 'danger' }, this.props.dispatch)
     }
   }
 
@@ -80,10 +81,10 @@ export default class CreateEdit extends React.Component {
     }
     let update = await this.updateModel(id, data)
     if(update.response === 200){
-        return formMessage('success', 'Successfully Updated.')
+			Messages.set('orders', { message: 'Successfully updated.', type: 'success' }, this.props.dispatch)
     }
     else {
-        return formMessage('danger', 'Updating Failed.')
+      Messages.set('orders', { message: 'Updating failed.', type: 'success' }, this.props.dispatch)
     }
   }
 
@@ -98,10 +99,11 @@ export default class CreateEdit extends React.Component {
 
 	render() {
 		let { props } = this
-		let { location, forms, models, dispatch } = props
+		let { location, messages, dispatch } = props
 		let { base, page, method, params } = getLocation(location)
 
 		console.log('this.state', this.state)
+
 		return [
 			<Form
 				keepDirtyOnReinitialize={true}
@@ -113,19 +115,52 @@ export default class CreateEdit extends React.Component {
 						},
 					}}
 				render={({ mutators, submitError, submitting, handleSubmit, pristine, invalid, values }) => {
+					let progressStyle = () => {
+						if(values.status === 'pending'){
+							return { width: '25%'}
+						}
+						else if(values.status === 'shipped'){
+							return { width: '50%'}
+						}
+						else if(values.status === 'delivered'){
+							return { width: '75%'}
+						}
+						else if(values.status === 'completed'){
+							return { width: '100%'}
+						}
+					}
+
+
+					let calcCostOfGoodsSold = () => {
+						let cost = 0;
+						this.state.data.items && this.state.data.items.map((item, index)=>{
+							cost += (item.cost + item.markup) * item.quantity
+						})
+						return cost
+					}
+
+					let calcCostOfGoods = () => {
+						let cost = 0;
+						this.state.data.items && this.state.data.items.map((item, index)=>{
+							cost += item.cost * item.quantity
+						})
+						return cost
+					}
+
 					return (
 						<form onSubmit={handleSubmit} className={`row px-5`} id={`createEditForm`}>
 							<div className={`col-12`}>
-	  						{submitError && submitError}
+	  						{messages.orders && <div className={`alert alert-${messages.orders.type}`}>{messages.orders.message}</div>}
 	  					</div>
 	  					<div className={`col-4`}>
 								<Card
 									className={`mb-4`}
 									body={[
 										<div className='col-6 mx-auto text-center'>
-											<img src="/img/admin/avatar.jpg" className="w-100 rounded-circle mb-3" />
+											<img src={`/img/admin/avatar.jpg`} className="w-100 rounded-circle mb-3" />
 
-											Username
+											{this.state.data.user && this.state.data.user.username}<br/>
+											{this.state.data.user && this.state.data.user.email}
 
 										</div>
 									]}
@@ -138,19 +173,19 @@ export default class CreateEdit extends React.Component {
 									   		<div className="col-12">
 									   			<div className='row'>
 									   				<div class='col-6'>Items:</div>
-									   				<div class='col-6 text-right'>{this.state.data.amount && this.state.data.amount.items}</div>
+									   				<div class='col-6 text-right'>${this.state.data.amounts && this.state.data.amounts.items}</div>
 									   			</div>
 									   		</div>
 									   		<div className="col-12">
 									   			<div className='row'>
 									   				<div class='col-6'>Shipping:</div>
-									   				<div class='col-6 text-right'>{this.state.data.amount && this.state.data.amount.shipping}</div>
+									   				<div class='col-6 text-right'>${this.state.data.amounts && this.state.data.amounts.shipping}</div>
 									   			</div>
 									   		</div>
 									   		<div className="col-12">
 									   			<div className='row'>
 									   				<div class='col-6'>Discounts:</div>
-									   				<div class='col-6 text-right'>-{this.state.data.amount && this.state.data.amount.discounts}</div>
+									   				<div class='col-6 text-right'>- ${this.state.data.amounts && this.state.data.amounts.discounts}</div>
 									   			</div>
 									   		</div>
 									   		<div className="col-12">
@@ -159,13 +194,13 @@ export default class CreateEdit extends React.Component {
 									   					<hr className='my-1'/>
 									   				</div>
 									   				<div class='col-6'>Sub-Total:</div>
-									   				<div class='col-6 text-right'>{this.state.data.amount && this.state.data.amount.sub_total}</div>
+									   				<div class='col-6 text-right'>${this.state.data.amounts && this.state.data.amounts.sub_total}</div>
 									   			</div>
 									   		</div>
 									   		<div className="col-12">
 									   			<div className='row'>
 									   				<div class='col-6'>Tax:</div>
-									   				<div class='col-6 text-right'>{this.state.data.amount && this.state.data.amount.tax}</div>
+									   				<div class='col-6 text-right'>${this.state.data.amounts && this.state.data.amounts.tax}</div>
 									   			</div>
 									   		</div>
 											</div>
@@ -174,40 +209,34 @@ export default class CreateEdit extends React.Component {
 									footer={[
 										<div className='row'>
 						   				<div class='col-6'>Amount Total:</div>
-						   				<div class='col-6 text-right'>{this.state.data.amount && this.state.data.amount.total}</div>
+						   				<div class='col-6 text-right'>${this.state.data.amounts && this.state.data.amounts.total}</div>
 										</div>
 									]}
 								/>
 								<Card
 									className={`mb-5`}
-									header={
-										<div className='col-12 mb-0'>
-											Profit Reports
-										</div>
-									}
 									body={[
+										<h6 className='card-title'>Profit Reports</h6>,
 										<div className='row'>
-							   			<div className='col-12'>
-								   			Cost of Goods Sold:
-											<br/>
-						   					- Costs of Goods:
-						   					<hr/>
-						   					Profit on Items:
-						   					<hr/>
-						   					+ Shipping: <br/>
-						   					- Discounts:
-						   					<hr/>
-						   					= Sub-total: <br/>
-						   					+ Tax:
-						   					<hr/>
-						   					= Total Profit Amount:
-							   			</div>
-										</div>
-									]}
-									footer={[
-										<div className='row'>
-						   				<div class='col-6'>Amount Total:</div>,
-						   				<div class='col-6 text-right'></div>
+											<div className="col-12">
+												<div className='row'>
+													<div class='col-6'>Cost of Goods Sold:</div>
+													<div class='col-6 text-right'>${calcCostOfGoodsSold()}</div>
+												</div>
+												<div className='row'>
+													<div class='col-6'>Cost of Goods:</div>
+													<div class='col-6 text-right'>- ${calcCostOfGoods()}</div>
+												</div>
+												<div className='row'>
+													<div className='col-12'>
+														<hr className='my-1'/>
+													</div>
+												</div>
+												<div className='row'>
+													<div class='col-6'>Goods Sold Profit:</div>
+													<div class='col-6 text-right'>${calcCostOfGoodsSold() - calcCostOfGoods()}</div>
+												</div>
+											</div>
 										</div>
 									]}
 								/>
@@ -219,45 +248,74 @@ export default class CreateEdit extends React.Component {
 									body={[
 										<div className='row'>
 											<div className='col-6 mb-2'>
-												<h6 style={{ fontFamily: 'Graphik Web', fontWeight: '300', fontSize: '1.25rem', letterSpacing: '3px' }}>PURCHASE DATE</h6>
-												<span className='delivery-date' style={{ color: '#00a2e1', fontSize: '1.25rem', fontWeight: '400' }}>Sep 18, 2017</span>
+												<h6>Purchase Date</h6>
+												<p>{this.state.data.date && moment(this.state.data.date).format("MMM D, YYYY")}</p>
 												<hr/>
-												Visa<br/>
-												Ending in 4267<br/>
+												{_.has(this.state.data, 'stripe_charge.source.brand') && this.state.data.stripe_charge.source.brand}<br/>
+												Ending in {_.has(this.state.data, 'stripe_charge.source.last4') && this.state.data.stripe_charge.source.last4}<br/>
+
 											</div>
 											<div className='col-6 mb-2 text-right'>
-												<h6 style={{ fontFamily: 'Graphik Web', fontWeight: '300', fontSize: '1.25rem', letterSpacing: '3px' }}>EST. DELIVERY</h6>
-												<span className='delivery-date' style={{ color: '#00a2e1', fontSize: '1.25rem', fontWeight: '400' }}>Sep 16 - Sep 18, 2017</span>
+												<h6>Est. Delivery</h6>
+												<p>{this.state.data.date && moment(this.state.data.date).add(5,'days').format("MMM D")} - {this.state.data.date && moment(this.state.data.date).add(7,'days').format("MMM D, YYYY")}</p>
 												<hr/>
+												{this.state.data.shipping && this.state.data.shipping.first_name} {this.state.data.shipping && this.state.data.shipping.last_name}<br/>
+												{this.state.data.shipping && this.state.data.shipping.line1}?<br/>
+												{this.state.data.shipping && this.state.data.shipping.line2}<br/>
+												{this.state.data.shipping && this.state.data.shipping.city} {this.state.data.shipping && this.state.data.shipping.state} {this.state.data.shipping && this.state.data.shipping.postal_code}<br/>
+												{this.state.data.shipping && this.state.data.shipping.country}<br/>
 											</div>
 											<div className='col-12'>
 												<hr className='hr'/>
 											</div>
 											<div className="col-12 mt-3 mb-3">
 												<div className="progress">
-													<div className="progress-bar bg-success opacity-50" role="progressbar" style={{width: '25%'}} aria-valuenow={15} aria-valuemin={0} aria-valuemax={100} />
-													<div className="progress-bar bg-success" role="progressbar" style={{width: '25%'}} aria-valuenow={30} aria-valuemin={0} aria-valuemax={100} />
+													<div className="progress-bar bg-success" role="progressbar" style={progressStyle()} />
 												</div>
 											</div>
 											<div className="col">
-												<span>Pending</span>
-												<br />
-												<small className="text-muted"><i className="icon-check mr-1" />Completed: 24th March</small>
+												<label>
+						              <Field
+						                name="status"
+						                component="input"
+						                type="radio"
+						                value="pending"
+						              />{' '}
+						              Pending
+						            </label>
 											</div>
 											<div className="col">
-												<span>Shipped</span>
-												<br />
-												<small className="text-muted"><i className="icon-calendar mr-1" />Due: 3rd April</small>
+												<label>
+													<Field
+														name="status"
+														component="input"
+														type="radio"
+														value="shipped"
+													/>{' '}
+													Shipped
+												</label>
 											</div>
 											<div className="col">
-												<span>Delivered</span>
-												<br />
-												<small className="text-muted"><i className="icon-calendar mr-1" />Due: 19th April</small>
+												<label>
+													<Field
+														name="status"
+														component="input"
+														type="radio"
+														value="delivered"
+													/>{' '}
+													Delivered
+												</label>
 											</div>
 											<div className="col">
-												<span>Compeleted</span>
-												<br />
-												<small className="text-muted"><i className="icon-calendar mr-1" />Due: 31st April</small>
+											<label>
+												<Field
+													name="status"
+													component="input"
+													type="radio"
+													value="completed"
+												/>{' '}
+												Completed
+											</label>
 											</div>
 										</div>
 									]}
@@ -269,9 +327,9 @@ export default class CreateEdit extends React.Component {
 										[	<h6 className='card-title'>Items</h6>,
 											_.map(this.state.data.items, (item, key, arr)=>{
 												return (
-													<div className="text-center row d-flex align-items-center mb-4">
+													<div className="text-center row d-flex align-items-center mb-4" key={key}>
 														<div className="col-2">
-															<img src='/img/admin/uploads/41025693_025_b4.jpg' className='w-100 mb-4' />
+															<img src={item.images[0]} className='w-100 mb-4' />
 														</div>
 														<div className="col-3 text-left">
 															<h6>{item.title}</h6>
@@ -297,66 +355,7 @@ export default class CreateEdit extends React.Component {
 									}
 								/>
 
-								<Card
-									header={[
-										<div className='col-6 mb-0'>
-											Support
-										</div>,
-										<div className='col-6 controls d-flex justify-content-end'>
-											<b style={{ fontWeight: '500' }}>Order ID#:</b>
-										</div>
-									]}
-									body={[
 
-										<div className='col-4'>
-											<h6 className='mb-1'><span className='float-left'>John Tax</span>
-					                		</h6>
-					                		{/*<span style={{ width: '0.75rem', height: '0.75rem', display: 'block', marginTop: '0.25rem', marginLeft: '0.5rem', float: 'left', backgroundColor: '#02B875', borderRadius: '100%' }}/>*/}
-					                		<span className="text-muted text-small" style={{ display: 'block', clear: 'both' }}>Inhertia Support Team</span>
-					                	</div>,
-
-										<div className='col-8'>
-					                		<span className="text-muted text-small" style={{ display: 'block', clear: 'both' }}>Hi, we received your return and have refunded your purchase. Please allow for 2 business days for your card company to process your refund.</span>
-					                	</div>,
-
-
-								        <div className="col-12 px-0">
-											<div className="card-body overflow-auto">
-												{/*model.messages && _.map(model.messages, (item, key, arr)=>{
-												return (
-													<div className={`row mb-3 ${(item.user_id == user._id ? 'justify-content-end text-right' : 'justify-content-start')}`}>
-												      <div className="col-auto">
-												        <div className={`card ${(item.user_id == user._id ? 'bg-primary text-white' : 'justify-content-start bg-light')}`}>
-												          <div className="card-body p-2">
-												            <p className="mb-0">
-												              {item.message}
-												            </p>
-												            <div>
-												              <small className="opacity-60">{moment(item.date).format('h:mma')}</small>
-												            </div>
-												          </div>
-												        </div>
-												      </div>
-												    </div>
-												)
-												})*/}
-											</div>
-										</div>
-									]}
-									footer={[
-							          	<div className="col-12 bg-light">
-								            <Form name={'orderMessages'} className="d-flex align-items-center">
-								              <div className="input-group input-group-lg">
-
-								                <input className="form-control" type="text" placeholder="Type a message" name="message" />
-								              </div>
-								              <button className="btn btn-link pr-0" type='submit'>
-								                <span className="h3">💌</span>
-								              </button>
-								            </Form>
-							          	</div>
-							     	]}
-								/>
 							</div>
 						</form>
 

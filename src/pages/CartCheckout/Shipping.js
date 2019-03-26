@@ -107,9 +107,9 @@ export default class Shipping extends React.Component {
 				render={({ values, handleSubmit, onChange }) => (
 					<form className='row' onSubmit={handleSubmit}>
 					<div className='col-12'>
-						<h2 className='font-weight-light'>Shipping</h2>
+						<h3 className='font-weight-light'>Shipping</h3>
 						<hr/>
-						<pre>{JSON.stringify(values, 0, 2)}</pre>
+						{/*<pre>{JSON.stringify(values, 0, 2)}</pre>*/}
 
 						<div className={`orderShipping mb-5`}>
 							{user.customer &&
@@ -118,23 +118,19 @@ export default class Shipping extends React.Component {
 									 	{(!_.isEmpty(user.customer.shipping) ? _.map(user.customer.shipping, (item, key, arr)=>{
 											return [
 												<div className='row'>
-													<div className='col-auto d-flex align-items-center'>
-														{((user.customer.shipping_primary_id == item._id) ? (<i className='material-icons text-success'>check_circle</i>) : (<i className='material-icons text-secondary'>check_circle</i>))}
-													</div>
-													<div className='col-10 d-flex justify-content-start align-items-center'>
-														<p className='mb-0'>{item.line1 && item.line1}. {item && item.line1}  {item && item.city}, {item && item.state} {item && item.postal_code}</p>
-													</div>
-													<div className='col-1 d-flex flex-column align-items-end justify-content-end'>
+													<div className='col-1 d-flex'>
 														<a href='#' onClick={e=>this.selectShipping({ e, shipping: item })}>
 															{_.has(cart, 'shipping') ? (cart.shipping._id === item._id ? <i className='material-icons'>check_box</i> : <i className='material-icons'>check_box_outline_blank</i>) : <i className='material-icons'>check_box_outline_blank</i>}
 														</a>
+													</div>
+													<div className='col-11 d-flex justify-content-start align-items-center'>
+														<p className='mb-0'>{item.line1 && item.line1}. {item && item.line1}  {item && item.city}, {item && item.state} {item && item.postal_code}</p>
 													</div>
 												</div>,
 											]
 										})
 										:
 											[
-												<hr/>,
 												<p className='mb-0'>You haven't saved any addresses methods.</p>
 											]
 										)}
@@ -144,6 +140,9 @@ export default class Shipping extends React.Component {
 
 							<div className="form row">
 								<div className="form-group col-3">
+									<label>
+										First Name
+									</label>
 									<Field
 										name="first_name"
 										component="input"
@@ -160,6 +159,9 @@ export default class Shipping extends React.Component {
 					         </OnChange>
 								</div>
 								<div className="form-group col-3">
+									<label>
+										Last Name
+									</label>
 									<Field
 			              name="last_name"
 			              component="input"
@@ -175,7 +177,10 @@ export default class Shipping extends React.Component {
 											}}
 									 </OnChange>
 								</div>
-								<div className="form-group col-3">
+								<div className={`form-group col-3 ${_.isEmpty(user) ? 'col-3' : 'col-6'}`}>
+									<label>
+										Phone
+									</label>
 									<Field
 										name="phone"
 										component="input"
@@ -191,7 +196,10 @@ export default class Shipping extends React.Component {
 											}}
 									 </OnChange>
 								</div>
-								<div className="form-group col-3">
+								{_.isEmpty(user) && <div className="form-group col-3">
+									<label>
+										Email
+									</label>
 									<Field
 										name="email"
 										component="input"
@@ -206,8 +214,11 @@ export default class Shipping extends React.Component {
 													}
 											}}
 									 </OnChange>
-								</div>
+								</div>}
 								<div className="form-group col-8">
+									<label>
+										Address Street
+									</label>
 									<Field
 										name="line1"
 										component="input"
@@ -224,6 +235,9 @@ export default class Shipping extends React.Component {
 									 </OnChange>
 								</div>
 								<div className="form-group col-4">
+									<label>
+										Apt. Suite. etc...
+									</label>
 									<Field
 										name="line2"
 										component="input"
@@ -240,6 +254,9 @@ export default class Shipping extends React.Component {
 									 </OnChange>
 								</div>
 								<div className="form-group col-3">
+									<label>
+										City
+									</label>
 									<Field
 										name="city"
 										component="input"
@@ -256,6 +273,9 @@ export default class Shipping extends React.Component {
 									 </OnChange>
 								</div>
 								<div className="form-group col-3">
+									<label>
+										State
+									</label>
 									<Field
 										name="state"
 										component="input"
@@ -272,6 +292,9 @@ export default class Shipping extends React.Component {
 									 </OnChange>
 								</div>
 								<div className="form-group col-3">
+									<label>
+										Zip/ Postal Code
+									</label>
 									<Field
 										name="postal_code"
 										component="input"
@@ -288,6 +311,9 @@ export default class Shipping extends React.Component {
 									 </OnChange>
 								</div>
 								<div className="form-group col-3">
+									<label>
+										Country
+									</label>
 									<Field
 										name="country"
 										component="input"

@@ -5,23 +5,10 @@ export class ImageUpload extends React.Component {
 		super(props)
 	}
 
-	deleteImage = async (key) => {
-		let { props } = this
-		let { location, forms, models, dispatch } = props
-		let { base, page, method, params } = getLocation(location)
-		page = page.slice(0, -1)
-		let inputs = forms && forms[page] && forms[page].inputs
-
-		inputs = {
-			...inputs,
-			[name]: { value: _.pull(this.state.value, value) }
-		}
-
-		_.remove(inputs.images.value, function(n, k) {
-			console.log('n', n, k)
-			return k == key
-		});
-		//Form.set({ name: page, inputs: inputs, status: '', message: '', dispatch})
+	deleteImage = async (e) => {
+		e.preventDefault()
+		this.props.input.value = ""
+		this.props.input.onChange(this.props.input.value)
 	}
 
 	onChange = async (e) => {
@@ -48,11 +35,11 @@ export class ImageUpload extends React.Component {
 			<div className='row'>
 				<div className={`${className} form-group col-12`}>
 					<div className="card border-0 rounded-0">
-						<div className="card-body p-0">
+						<div className="card-body text-center p-0">
 							<div className='card-img-top-controls float-right p-3' style={{ position: 'absolute', right: '0' }}>
-								<a href='#' className='text-white close' onClick={(e)=>this.deleteImage(0)}><i className='material-icons'>close</i></a>
+								<a href='#' className='close' onClick={(e)=>this.deleteImage(e)}><i className='material-icons'>close</i></a>
 							</div>
-							{!_.isEmpty(this.props.input.value) && <img src={(!_.isEmpty(this.props.input.value[0].image) ? this.props.input.value[0].image : this.props.input.value)} className='w-100 rounded-circle' />}
+							{!_.isEmpty(this.props.input.value) && <img src={(!_.isEmpty(this.props.input.value[0].image) ? this.props.input.value[0].image : this.props.input.value)} className='w-50 text-center rounded-circle' />}
 
 						</div>
 					</div>

@@ -205,7 +205,6 @@ export default class CreateEdit extends React.Component {
                   </div>
   							]}
   						/>
-  							<pre style={{ maxWidth: '400px' }}>{JSON.stringify(values, 0, 2)}</pre>
 						</div>
             <div className={`col-4`}>
   						<Card
@@ -230,7 +229,6 @@ export default class CreateEdit extends React.Component {
   						/>
   						<Card
   							className='mb-4'
-
   							body={[
                   <h6 className='card-title'>
                     Roles

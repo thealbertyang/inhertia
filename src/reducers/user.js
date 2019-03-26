@@ -4,6 +4,10 @@ export default (state = {}, action = {}) => {
 	    	console.log('got user set', { ...state, ...action.payload })
 	    	return { ...state, ...action.payload }
 	    }
+	    case 'USER_LOGOUT': {
+	    	console.log('got user set', { })
+	    	return { }
+	    }
 	    default:
 	      return state
 	}

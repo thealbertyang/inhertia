@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import universal from 'react-universal-component'
 import * as _ from 'lodash'
+import moment from 'moment'
 import Link from 'redux-first-router-link'
 
 import Navbar from '../components/Page/Navbar'
@@ -10,6 +11,7 @@ import Section from '../components/Page/Section'
 import Footer from '../components/Page/Footer'
 import Avatar from '../components/Page/Avatar'
 
+import Rating from '../components/Form/Rating'
 import Button from '../components/Form/Button'
 import ButtonAlt from '../components/Form/ButtonAlt'
 
@@ -22,23 +24,31 @@ import { fetchData, postData } from '../utils'
 import { getLocation, redirect } from '../actions/index'
 import * as Cart from '../actions/cart'
 
+let renderStyles = (key, rating) => {
+	if(rating >= key){
+		return { fontSize: '1rem', color: '#ffbf00' }
+	}
+	else {
+		return { fontSize: '1rem', color: '#a2a2a2' }
+	}
+}
 
-const Review = ({ name }) =>
+const Review = ({ username, comment, avatar, rating, date }) =>
 	<tr>
-		<td className={`py-5`}>
-			<Avatar size={`medium`}/><br/>
+		<td className={`py-5`} width='10%'>
+			<Avatar size={`medium`} src={avatar} />
 		</td>
 		<td className={`text-justify py-5`}>
-			<span style={{ fontWeight: '500' }}>{name ? name : 'Ashley Briggs' }</span>&nbsp; <span className={`text-muted mb-2`}>1-8-19</span><br/>
+			<span style={{ fontWeight: '500' }}>{username ? username : 'Ashley Briggs' }</span>&nbsp; <span className={`text-muted mb-2`}>{moment(date).format("MMM Do YYYY")}</span><br/>
 			<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
-						<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
-						<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
-						<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
-						<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
-						<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+						<i className='material-icons' style={renderStyles(1, rating)}>star</i>
+						<i className='material-icons' style={renderStyles(2, rating)}>star</i>
+						<i className='material-icons' style={renderStyles(3, rating)}>star</i>
+						<i className='material-icons' style={renderStyles(4, rating)}>star</i>
+						<i className='material-icons' style={renderStyles(5, rating)}>star</i>
 			</div>
 			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+				{comment ? comment : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim'}
 			</p>
 		</td>
 	</tr>
@@ -55,7 +65,7 @@ export default class Product extends React.Component {
 		super(props);
 	}
 
-	state = { data: {} }
+	state = { data: {}, imageIndex: 0 }
 
 	load = async (slug) => {
 		let model = await this.fetchModel(slug)
@@ -75,28 +85,49 @@ export default class Product extends React.Component {
 		return await postData(`/api/product/update/${id}`, fields)
 	}
 
-	createModel = async (fields) => {
-		return await postData(`/api/product/create`, fields)
+	createReviews = async (id, fields) => {
+		return await postData(`/api/product/reviews/${id}`, fields)
 	}
 
-	addToCart = ({ id, size, color, quantity }) => {
-		alert(this.state.data._id)
-		Cart.updateItem({  })
+	onSubmitReview = async (id, user_id, values) => {
+		let model = await this.createReviews(id, { ...values, user_id })
+
+		if(model.response === 200){
+			let { props } = this
+			let { location, user, forms, models, dispatch } = props
+			let { base, page, method, params } = getLocation(location)
+			let slug = page
+			this.setState({ loading: true })
+				 const data = await this.load(slug)
+				 this.setState({ loading: false, data })
+		}
+	}
+
+	addToWishlist = async (e) => {
+		let { props } = this
+		let { user } = props
+
+		e.preventDefault()
+
+		let wishlist = await postData(`/api/user/customer/wishlist/push/${user.customer._id}`, { product_id: this.state.data._id })
+		if(wishlist.response === 200){
+			console.log('successfully added')
+		}
 	}
 
 	onSubmit = (values) => {
-		  window.alert(JSON.stringify(values, 0, 2))
 			Cart.incrementItem({
 				id: this.state.data._id,
 				size: values.sizes,
 				color: values.colors,
 				quantity: values.quantity,
 			})
+			Cart.loadItems(this.props.dispatch)
 	}
 
 	componentDidMount = async () => {
 		let { props } = this
-		let { location, forms, models, dispatch } = props
+		let { location, user, forms, models, dispatch } = props
 		let { base, page, method, params } = getLocation(location)
 		let slug = page
 
@@ -105,23 +136,47 @@ export default class Product extends React.Component {
 			 this.setState({ loading: false, data })
 	}
 
+	changeImage = (e, image) => {
+		e.preventDefault()
+		this.setState({ imageIndex: image })
+	}
+
+	required = value => (value ? undefined : 'Required')
+
 	render() {
+		let { props } = this
+		let { location, user, forms, models, dispatch } = props
+		let { base, page, method, params } = getLocation(location)
+		let slug = page
+
+		let renderStyles = (key, rating) => {
+			if(rating >= key){
+				return { fontSize: '1rem', color: '#ffbf00' }
+			}
+			else {
+				return { fontSize: '1rem', color: '#a2a2a2' }
+			}
+		}
+
 			console.log('data', this.state.data)
+			console.log('data', base, page, method)
 			return [
 					<Navbar/>,
-          <Section>
+          typeof slug !== 'undefined' && this.state.data
+					? <Section>
 						<div className='container' style={{ maxWidth: '1350px' }}>
   						<div className='row mb-5'>
   							<div className='col-md-7 col-sm-12'>
 									<div className={`row`}>
 										<div className='col-md-2'>
-											{this.state.data.images && this.state.data.images[1] && <img src={this.state.data.images[1]} className="img-fluid mb-2" alt="..." />}
-											{this.state.data.images && this.state.data.images[2] && <img src={this.state.data.images[2]} className="img-fluid mb-2" alt="..." />}
-											{this.state.data.images && this.state.data.images[3] && <img src={this.state.data.images[3]} className="img-fluid mb-2" alt="..." />}
-											{this.state.data.images && this.state.data.images[4] && <img src={this.state.data.images[4]} className="img-fluid mb-2" alt="..." />}
+											{this.state.data.images && this.state.data.images[0] && <a href='#' onClick={(e)=>{ this.changeImage(e, 0) }}><img src={this.state.data.images[0]} className="img-fluid mb-2" alt="..." /></a>}
+											{this.state.data.images && this.state.data.images[1] && <a href='#' onClick={(e)=>{ this.changeImage(e, 1) }}><img src={this.state.data.images[1]} className="img-fluid mb-2" alt="..." /></a>}
+											{this.state.data.images && this.state.data.images[2] && <a href='#' onClick={(e)=>{ this.changeImage(e, 2) }}><img src={this.state.data.images[2]} className="img-fluid mb-2" alt="..." /></a>}
+											{this.state.data.images && this.state.data.images[3] && <a href='#' onClick={(e)=>{ this.changeImage(e, 3) }}><img src={this.state.data.images[3]} className="img-fluid mb-2" alt="..." /></a>}
+											{this.state.data.images && this.state.data.images[4] && <a href='#' onClick={(e)=>{ this.changeImage(e, 4) }}><img src={this.state.data.images[4]} className="img-fluid mb-2" alt="..." /></a>}
 										</div>
 										<div className='col-md-10'>
-											{this.state.data.images && this.state.data.images[0] && <img src={this.state.data.images[0]} className="img-fluid mb-2" alt="..." />}
+											{this.state.data.images && this.state.data.images[this.state.imageIndex] && <img src={this.state.data.images[this.state.imageIndex]} className="img-fluid mb-2" alt="..." />}
 										</div>
 									</div>
 								</div>
@@ -133,12 +188,12 @@ export default class Product extends React.Component {
 										<div className={`row mb-3`}>
 											<div className={`col-6`}>
 												<p className={`d-flex align-items-center`}>
-													<i className='material-icons' style={{ fontSize: '1.25rem', color: '#ffbf00' }}>star</i>
-													<i className='material-icons' style={{ fontSize: '1.25rem', color: '#ffbf00' }}>star</i>
-													<i className='material-icons' style={{ fontSize: '1.25rem', color: '#ffbf00' }}>star</i>
-													<i className='material-icons' style={{ fontSize: '1.25rem', color: '#ffbf00' }}>star</i>
-													<i className='material-icons mr-1' style={{ fontSize: '1.25rem', color: '#ffbf00' }}>star</i>
-													<small className={`text-muted text-uppercase`}>45 Reviews</small>
+													<i className='material-icons' style={renderStyles(1, this.state.data.ratings)}>star</i>
+													<i className='material-icons' style={renderStyles(2, this.state.data.ratings)}>star</i>
+													<i className='material-icons' style={renderStyles(3, this.state.data.ratings)}>star</i>
+													<i className='material-icons' style={renderStyles(4, this.state.data.ratings)}>star</i>
+													<i className='material-icons mr-1' style={renderStyles(5, this.state.data.ratings)}>star</i>
+													<small className={`text-muted text-uppercase`}>{this.state.data.reviews && this.state.data.reviews.length} Reviews</small>
 												</p>
 												<h6>
 													${this.state.data.price}
@@ -190,8 +245,8 @@ export default class Product extends React.Component {
 												</Button>
 											</div>
 											<div className={`col-6`}>
-												<a className='text-uppercase btn-lg border-0' href='#'>
-													<i class="material-icons mr-2">favorite_border</i> Add to Wishlist
+												<a className={`text-uppercase btn-block btn-lg bg-transparent ${_.isEmpty(user) && 'disabled'}`} href='#' onClick={e=>this.addToWishlist(e)}>
+													<i class="material-icons mr-2">favorite</i> Add to Wishlist
 												</a>
 											</div>
 										</div>
@@ -206,14 +261,54 @@ export default class Product extends React.Component {
 									</h4>
 									<div className='row'>
 										<div className="col-12">
-							        <table className="table responsive table-hover">
-							          <tbody className={`py-4`}>
-														<Review name={`Ashley Briggs`}/>
-														<Review name={`Jen Watkins`}/>
-														<Review name={`Emily Tran`}/>
-														<Review name={`Washondra Lee`}/>
-							          </tbody>
-							        </table>
+											<Form
+												onSubmit={(values)=>this.onSubmitReview(this.state.data._id, user._id, values)}
+												render={({ handleSubmit, values })=>(
+													<form onSubmit={handleSubmit}>
+										        <table className="table responsive table-hover">
+										          <tbody className={`py-4`}>
+																	{!_.isEmpty(this.props.user) && <tr className='bg-light'>
+																		<td className={`py-5`}>
+																			<Avatar src={this.props.user.avatar} size={`medium`}/><br/>
+																		</td>
+																		<td className={`text-justify py-5`}>
+																			<span style={{ fontWeight: '500' }}>{this.props.user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment().format("MMM Do YYYY")}</span><br/>
+																			<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
+																				<Field
+																					name="rating"
+																					component={Rating}
+																					fullWidth
+																					margin="normal"
+																					defaultValue={1}
+																				/>
+																			</div>
+																			<p>
+																				<Field
+																					name='comment'
+																					component='textarea'
+																					className='form-control'
+																					validate={this.required}
+																				>
+																					{({ input, meta }) => [
+																							<textarea {...input} className={'form-control'} />,
+																							meta.error && meta.touched && <span>{meta.error}</span>
+																					]}
+																				</Field>
+																			</p>
+																			<p>
+																				<button className='btn btn-primary'>Save Comment</button>
+																			</p>
+																		</td>
+																	</tr>
+																}
+																	{this.state.data.reviews && this.state.data.reviews.map((item, index)=> {
+																			return <Review avatar={item.user.avatar} username={item.user.username} comment={item.comment} rating={item.rating} date={item.date} />
+																	})}
+										          </tbody>
+										        </table>
+													</form>
+												)}
+												/>
 										</div>
 
 									</div>
@@ -223,23 +318,32 @@ export default class Product extends React.Component {
 										Related
 									</h4>
 									<div className='row'>
-										<div className='col-4'>
-											<Card
-												ratings={`visible`}
-												title='Blue Purse'
-											/>
-										</div>
-										<div className='col-4'>
-											<Card ratings={`visible`}/>
-										</div>
-										<div className='col-4'>
-											<Card ratings={`visible`}/>
-										</div>
+										{this.state.data.related && this.state.data.related.map((item, index)=>{
+
+											if((index + 1) <= 3){
+												return (
+													<div className="col-12 col-md-4">
+														<Card
+															url={`/product/${item.slug}`}
+															title={item.title}
+															images={item.images}
+															ratings={`visible`}
+															price={item.price}
+															ratings={item.ratings}
+														/>
+													</div>
+												)
+											}
+										})}
 									</div>
 								</div>
 							</div>
 						</div>
-          </Section>,
+          </Section>
+					: <Section className='flex-fill d-flex flex-column justify-content-center align-items-center'>
+							<h1>404</h1>
+							<p>Sorry this product doesn't exist.</p>
+					</Section>,
 					<Footer/>
 			]
 	}

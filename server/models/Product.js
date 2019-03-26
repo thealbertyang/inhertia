@@ -26,10 +26,18 @@ var ProductSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  views: {
-    type: Number,
-    default: 0,
-  },
+  reviews: [{
+    user_id: String,
+    comment: String,
+    rating: {
+      type: Number,
+      default: 1,
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+  }],
   images: [String],
   type: String,
   url: String,

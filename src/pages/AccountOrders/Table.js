@@ -55,18 +55,10 @@ export default class Table extends React.Component {
 		let { models, location } = props
 		let { base, page, method } = getLocation(location)
 		return [
-			<Form name={`search`}>
-	        	<div className="form-group d-flex justify-content-end mb-4 search">
-					<Input name='term' style={{ width: '10rem' }} placeholder={`Search orders`} /><button className="btn btn-outline-success d-flex align-items-center" type="submit"><i className='material-icons'>search</i></button>
-				</div>
-			</Form>,
 			<div className="table-responsive border bg-white">
 				<table className="table table-striped table-hover mb-0">
 					<thead>
 						<tr>
-							<th>
-								Id
-							</th>
 							<th>
 								Order Date
 							</th>
@@ -89,11 +81,10 @@ export default class Table extends React.Component {
 							{_.map(models['orders'], (item, key, arr)=> {
 								return (
 									<tr>
-										<td>{item._id}</td>
 										<td>{item.date}</td>
 										<td>--</td>
 										<td>{item.status}</td>
-										<td>{item.amount.total}</td>
+										<td>{item.amounts.total}</td>
 										<td className='text-right'>
 											<a href={`/${base}/${page}/${item._id}`}><i className='material-icons'>open_in_browser</i></a>
 										</td>

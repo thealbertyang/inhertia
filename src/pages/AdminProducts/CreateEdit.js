@@ -11,6 +11,7 @@ import { FieldArray } from 'react-final-form-arrays'
 
 import Card from '../../components/Admin/Card'
 import ImagesUpload from '../../components/Form/ImagesUpload'
+import Avatar from '../../components/Page/Avatar'
 
 import { fetchData, postData } from '../../utils'
 import { getLocation, redirect } from '../../actions/index'
@@ -158,7 +159,7 @@ export default class CreateEdit extends React.Component {
             <div className={`col-12`}>
 							{messages.products && <div className={`alert alert-${messages.products.type}`}>{messages.products.message}</div>}
 						</div>
-						<div className="col-8">
+						<div className="col-12 col-md-8">
 							<Card
 								className='mb-4'
 								body={[
@@ -268,10 +269,65 @@ export default class CreateEdit extends React.Component {
                   </div>
 								]}
 							/>
+							<Card
+								className='mb-4'
+                body={[
+                  <div className='row'>
+                    <div className='card-title col-6'>
+                      <h6>
+                        Reviews
+                      </h6>
+  									</div>
+  									<div className='card-controls col-6 mb-0 d-flex align-items-center justify-content-end'>
+  									</div>
+                  </div>,
+                  <div className='row'>
+                    <div className="form-group col-12">
+                    <table className="table responsive table-hover mb-0">
+                     <tbody className={`py-4`}>
+                      <FieldArray name="reviews">
+
+                         {({ fields }) =>
+                           fields.map((name, index) => [
+														 <tr key={name}>
+																<td className={`py-5`} width='10%'>
+                                  <Avatar src={fields.value[index].user.avatar} size='medium' />
+																</td>
+																<td className={`text-justify py-5`}>
+																	<span style={{ fontWeight: '500' }}>{fields.value[index].user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment(fields.value[index].date).format("MMM Do YYYY")}</span><br/>
+																	<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
+																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
+																	</div>
+																	<p>
+                                    {fields.value[index].comment}
+																	</p>
+																</td>
+                                <td className={`py-5 text-right`}>
+                                  <span
+                                    onClick={() => fields.remove(index)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    <i className='fas fa-trash'></i>
+                                  </span>
+                                </td>
+															</tr>,
+                          ])
+                         }
+                       </FieldArray>
+                       </tbody>
+                     </table>
+                    </div>
+                  </div>
+								]}
+							/>
 						</div>
-						<div className='col-4'>
+						<div className='col-12 col-md-4 d-flex flex-column'>
               <Card
-                className='mb-4'
+                className='mb-4 order-3 order-md-1'
                 body={[
                   <div className='row'>
 										<div className='card-title col-6'>
@@ -293,23 +349,12 @@ export default class CreateEdit extends React.Component {
 												<option value='published'>Published</option>
 											</Field>
 										</div>
-										<div className={`form-group col-12`}>
-											<Field name="stock">
-  											{({ input, meta }) => [
-  													<label>Stock</label>,
-  													<input type="number" {...input} placeholder="Stock" className={`form-control`} />,
-  													meta.touched && meta.error && <span>{meta.error}</span>,
-  											]}
-  										</Field>
-										</div>
 									</div>
                 ]}
               />
 
-
-
 							<Card
-								className='mb-4'
+								className='mb-4 order-2 order-md-2'
 								body={[
                   <h6 className='card-title'>
                     Colors
@@ -349,8 +394,9 @@ export default class CreateEdit extends React.Component {
                   </div>
 								]}
 							/>
+
 							<Card
-  							className='mb-4'
+  							className='mb-4 order-1 order-md-3'
   							body={[
                   <h6 className='card-title'>
                     Sizes

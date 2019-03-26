@@ -32,7 +32,7 @@ export default class About extends React.Component {
   						<div className='row'>
   							<div className='col-6 offset-3'>
   								<p>
-  									We are a online boutique brand, established in Los Angeles, California. Our brand proudly supports the empowerment of women. Our site is designed from scratch - we are not a shopify store, which means we'll be able to provide you with the best customer features and contemporary user experience. With this in mind, we hope to establiash a lasting relationship with our customer base!
+  									Hi, we are a recently established online company. We hope to build a strong customer base by selling inexpensive clothing with style. 
   								</p>
   							</div>
   						</div>

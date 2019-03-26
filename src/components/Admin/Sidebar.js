@@ -10,7 +10,7 @@ const NavItem = ({ url, title, icon}) =>
   </li>
 
 const Sidebar = ({ base }) => [
-  <div className={`sidebar col-2`}>
+  <div className={`sidebar col-1 col-md-2`}>
     <div className={`row`}>
       <div className={`col-12 py-3`}>
         <h5 className="my-0 mr-md-4 font-weight-normal navbar-brand"><a href="/">INHERTIA</a></h5>
@@ -22,7 +22,6 @@ const Sidebar = ({ base }) => [
   				</li>
           <NavItem url={`/${base}`} title={`Dashboard`} icon={`home`} />
           <NavItem url={`/${base}/campaigns`} title={`Campaigns`} icon={`funnel-dollar`} />
-          <NavItem url={`/${base}/support`} title={`Support`} icon={`question-circle`} />
           <NavItem url={`/${base}/orders`} title={`Orders`} icon={`file-invoice-dollar`} />
         </ul>
         <ul className={`nav flex-column text-left mb-3`}>
@@ -30,7 +29,6 @@ const Sidebar = ({ base }) => [
               <small className={`text-uppercase`}>Store</small>
           </li>
           <NavItem url={`/${base}/products`} title={`Products`} icon={`shopping-bag`} />
-          <NavItem url={`/${base}/productCategories`} title={`Categories`} icon={`align-right`} />
 
         </ul>
         <ul className={`nav flex-column text-left mb-3`}>
@@ -64,12 +62,6 @@ const Sidebar = ({ base }) => [
           <li class="sidebar-header">
   						<small className={`text-uppercase`}>App</small>
   				</li>
-          <li className="nav-item">
-          <Link to={`/${base}/reports/`} className="nav-link">
-              <i className='material-icons mr-1'>insert_chart_outlined</i>
-                Reports
-            </Link>
-          </li>
 
           <li className="nav-item">
           <Link to={`/${base}/settings/`} className="nav-link">
@@ -84,13 +76,6 @@ const Sidebar = ({ base }) => [
                 </Link>
               </li>
             </ul>
-          </li>
-
-          <li className="nav-item">
-          <Link to={`/${base}/profile/`} className="nav-link">
-              <i className='material-icons mr-1'>people</i>
-                Profile
-            </Link>
           </li>
 
         </ul>

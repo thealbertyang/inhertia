@@ -9,7 +9,7 @@ import * as Models from '../../actions/models'
 
 import { fetchData, postData, deleteData } from '../../utils'
 
-import { Form, Input } from '../Form'
+import { Form, Field } from 'react-final-form'
 
 
 @connect((store)=>{
@@ -70,7 +70,6 @@ export default class Index extends React.Component {
 
 		let model = await deleteData(`/api/${modelApi}/delete/${id}`)
 		if(model.response === 200){
-			this.loadSearch()
 			Models.set('messages', { [page]: { status: 'success', message: `Successfully deleted ${id}.`} }, dispatch)
 		}
 
@@ -79,46 +78,31 @@ export default class Index extends React.Component {
 			 this.setState({ loading: false, data })
 	}
 
-	loadSearch = async () => {
+	loadSearchtwo = async (values) => {
+		alert(JSON.stringify(values,0,2))
 		let { props } = this
-		let { location, forms, dispatch } = props
-		let api = props.api
+		let { api, location, dispatch } = props
 		let { base, page, method, params } = getLocation(location)
 		let currPage = params[0],
 			limit = params[1]
 
-		let modelApi = (typeof api !== 'undefined' && _.has(api,'fetchModels')) ? api.fetchModels : page
+		let modelSearchAll = await this.searchAll({ api: this.getModelsApi(), term: values.term, currPage, limit })
+		if(modelSearchAll.response === 200){
+			if(_.isEmpty(modelSearchAll.data.docs)){
+					//	window.location.href = `/${base}/${page}/pagination/${!isNaN(currPage) ?  (currPage - 1) : '1'}/10`
 
-		let term = Form.fetchOne({ search: 'term' }, forms)
-		console.log('termvalue',term.value)
-		let isEmpty = (typeof term.value === 'undefined' || term.value === '')
-		if(!isEmpty){
-
-			let searchAll = await this.searchAll({ api: modelApi, term, currPage, limit })
-			if(searchAll.response === 200){
-				if(_.isEmpty(searchAll.data.docs)){
-		   				window.location.href = `/${base}/${page}/pagination/${(currPage - 1)}/10`
-				}
-				else {
-					let inputs = _.mapValues(search.data, (v,k)=>{
-				        return ({ value: v })
-		      		})
-					Form.set({ name: 'search', inputs , status: 'success', message: 'Succesfully searched.', dispatch})
-					Models.set(page, searchAll.data, dispatch)
-				}
+					console.log('modelsSearchAll'. modelSearchAll)
 			}
-
-		}
-		else {
-			this.loadModels()
-			Form.set({ name: 'search', inputs: { term }, status: 'success', message: 'Succesfully searched.', dispatch})
-
+			else {
+				this.setState({ data: modelSearchAll.data })
+			}
 		}
 	}
 
+
 	searchAll = async ({ api, term, currPage, limit }) => {
 		console.log(currPage, limit)
-		return await fetchData(`/api/${api}/search/${term.value}/${(!isNaN(currPage) || !isNaN(limit) || typeof currPage !== 'undefined' || typeof limit !== 'undefined') ? `${currPage}/${limit}` : '1/10'}`)
+		return await fetchData(`/api/${api}/search/${term}/${(!isNaN(currPage) || !isNaN(limit) || typeof currPage !== 'undefined' || typeof limit !== 'undefined') ? `${currPage}/${limit}` : '1/10'}`)
 	}
 
 	handlePagination = (pageNumber) => {
@@ -132,16 +116,6 @@ export default class Index extends React.Component {
 			 this.setState({ loading: false, data })
 	}
 
-	componentDidUpdate = async (prevProps) => {
-		let { props } = this
-		let { forms, location } = props
-		let { page, params } = getLocation(location)
-
-		let prevPage = getLocation(prevProps.location).page
-
-
-		Form.didSubmit({ name: 'search', form: forms[`search`]}) && this.loadSearch()
-	}
 
 	render() {
 		let { props } = this
@@ -155,11 +129,28 @@ export default class Index extends React.Component {
 					{models.messages && models.messages[page] && models.messages[page].status == 'success' && <div className="alert alert-success text-left d-flex align-items-center mb-5" role="alert"><i className="material-icons">done</i>{models.messages[page].message}</div>}
 				</div>
 				<div className='col-12'>
-					<Form name={`search`}>
-			      <div className="form-group d-flex justify-content-end mb-4 search">
-							<Input name='term' style={{ width: '10rem' }} placeholder={`Search ${page}`} /><button className="btn btn-outline-success d-flex align-items-center" type="submit"><i className='material-icons'>search</i></button>
-						</div>
-					</Form>
+					<Form
+						onSubmit={this.loadSearchtwo}
+						render={({ handleSubmit, pristine, invalid, values }) => {
+							return (
+								<form onSubmit={handleSubmit} id={`indexSearchForm`}>
+									<div className="input-group mb-3">
+										<Field
+											name='term'
+											type='text'
+											component="input"
+											placeholder='Search for...'
+											className='form-control'
+										/>
+									  <div className="input-group-append">
+											<button className="btn btn-outline-success d-flex align-items-center" type="submit"><i className='material-icons'>search</i></button>
+									  </div>
+									</div>
+								</form>
+							)
+						}}
+					/>
+
 					<div className="table-responsive">
       			<table className="table table-striped table-hover border">
 							<thead>
@@ -168,7 +159,7 @@ export default class Index extends React.Component {
 										<input type='checkbox' name='checkbox'/>
 									</th>
 									{_.map(table.fields, (item, key, arr) => {
-										return <th>{item.label}</th>
+										return <th><a href='#'>{item.label}</a></th>
 									})}
 									<th>Actions</th>
 								</tr>
@@ -211,7 +202,7 @@ export default class Index extends React.Component {
 					          onChange={(e)=>this.handlePagination(e)}
 					          itemClass={`page-item`}
 					          linkClass={`page-link`}
-					          innerClass={`pagination`}
+					          innerclassName={`pagination`}
 					        />}
 						</div>
 					</div>

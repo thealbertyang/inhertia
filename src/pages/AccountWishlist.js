@@ -60,8 +60,7 @@ export default class AccountWishlist extends React.Component {
 		console.log('this.props', this.props)
 		return [
 		<div className={`container-fluid px-0 page page-account-wishlist`}>
-			<Header/>
-			<div className='container my-5 py-5' style={{ maxWidth: '1350px' }}>
+			<div className='container' style={{ maxWidth: '1350px' }}>
 				<div className="row">
 					<div className='col-6'>
 						<h5>Wishlist</h5>
@@ -72,17 +71,27 @@ export default class AccountWishlist extends React.Component {
 					<div className='col-12'>
 						<hr className='my-3' />
 					</div>
-					{_.has(models, 'wishlist') && _.map(models['wishlist'], (item, key, arr)=>(
-						<div className='col-3'>
-							<div className='card'>
-								<div className='card-body' style={{ height: '20rem', background: `url(${item.images ? item.images[0] : ''}) center center / cover no-repeat` }}>
+					{_.has(models, 'wishlist') && _.map(models['wishlist'], (item, key, arr)=>{
+
+						return (
+						<div className='col-4'>
+							<div className='card border-0'>
+								<div className='card-body p-0'>
+									<div className="card-img-top-controls float-right p-3" style={{ position: 'absolute', right: '0px' }}>
+										<a href="#" class="text-white close" onClick={e=>this.deleteWishlist(e, item._id)}>
+											<i className="material-icons">close</i>
+										</a>
+									</div>
+									{item.images && item.images[0] && <img src={item.images[0]} className='img-fluid'/>}
 								</div>
-								<div className='card-body'>
-									{item.title}
+								<div className='card-body p-0 mt-3'>
+									<h6 className="card-title mb-1">{item.title}</h6>
+									<p className="card-subtitle text-muted mb-3">${item.price}</p>
 								</div>
+
 							</div>
 						</div>
-					))}
+					)})}
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Form, Field } from "react-final-form"
-import { FORM_ERROR } from "final-form"
 
 import Navbar from '../components/Page/Navbar'
 import Section from '../components/Page/Section'
@@ -9,19 +8,38 @@ import Overline from '../components/Typography/Overline'
 
 import { getLocation, redirect } from '../actions/index'
 import * as User from '../actions/user'
+import * as Messages from '../actions/messages'
 
 import { postData } from '../utils'
 
 
 @connect((store)=>{
 	return {
+		messages: store.messages,
 	}
 })
 
 export default class Register extends React.Component {
 	constructor(props){
 		super(props)
+		window.addEventListener("resize", this.update)
 	}
+
+	state = {
+	 height: 0,
+	 width: 0
+	}
+
+	componentDidMount = async () => {
+		this.update()
+	}
+
+	update = () => {
+    this.setState({
+      height: window.innerHeight,
+      width: window.innerWidth
+    })
+  }
 
 	register = async (fields) => {
 		let { props } = this
@@ -33,7 +51,7 @@ export default class Register extends React.Component {
 			dispatch({ type: 'ACCOUNT' })
 		}
 		else {
-			 return { [FORM_ERROR]: "Login Failed." }
+			Messages.set('Register', { type: 'danger', message: login.message }, dispatch)
 		}
 	}
 
@@ -43,13 +61,14 @@ export default class Register extends React.Component {
 
 	render(){
 		let { props } = this
-		let { location } = props
+		let { messages, location } = props
 		let { base, page, method, params } = getLocation(location)
+		let backgroundImage = this.state.width >= 768 ? `/img/shop/RegisterSide.png` : ''
 
 		return [
 		  	<Navbar />,
-				<Section className={`flex-fill px-5 d-flex align-items-center`} Name={`hero`} BackgroundColor={`#ffffff`} BackgroundImage={`/img/shop/RegisterSide.png`} BackgroundSize={`contain`} BackgroundPosition={`25% center`} Height={`50rem`}>
-					<div className={`col-3 offset-6`}>
+				<Section className={`flex-fill px-5 d-flex align-items-center`} Name={`hero`} BackgroundColor={`#ffffff`} BackgroundImage={backgroundImage} BackgroundSize={`contain`} BackgroundPosition={`25% center`} Height={`50rem`}>
+					<div className={`col-12 col-md-3 offset-md-6`}>
 						<Overline>
 							Customer
 						</Overline>
@@ -77,7 +96,7 @@ export default class Register extends React.Component {
 				        values
 				      }) => (
 				        <form onSubmit={handleSubmit}>
-									{submitError && <div className="alert alert-danger" role="alert">{submitError}</div>}
+									{messages.Register && <div className={`alert alert-${messages.Register.type}`}>{messages.Register.message}</div>}
 									<div className="form-row my-4">
 										<div className="form-group col-6">
 											<Field name="username">

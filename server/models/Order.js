@@ -3,15 +3,15 @@ import bcrypt from 'bcrypt'
 var mongoosePaginate = require('mongoose-paginate');
 
 var OrderSchema = new mongoose.Schema({
-  stripe_customer_id: String,    
-  stripe_source_id: String,  
-  stripe_charge_id: String, 
+  stripe_customer_id: String,
+  stripe_source_id: String,
+  stripe_charge_id: String,
   discounts: [{
     title: String,
     discount_code: String,
     discount_amount: Number,
   }],
-  amount: {
+  amounts: {
     items: Number,
     total: Number,
     sub_total: Number,
@@ -25,8 +25,10 @@ var OrderSchema = new mongoose.Schema({
     color: String,
     size: String,
     quantity: Number,
-    price: Number, 
-    importData: Object, 
+    price: Number,
+    markup: Number,
+    cost: Number,
+    images: [String],
   }],
   shipping: {
     first_name: String,

@@ -69,13 +69,14 @@ export default class Collection extends React.Component {
             <div className="row">
 							{this.state.loaded === true && _.map(models['products'], (item, key, arr)=>{
 									return (
-										<div className="col-3 px-5 d-flex flex-column align-items-center">
+										<div className="col-12 col-md-3 px-5 d-flex flex-column align-items-center">
 											<Card
 												url={`/product/${item.slug}`}
 												title={item.title}
 												images={item.images}
 												ratings={`visible`}
 												price={item.price}
+												ratings={item.ratings}
 											/>
 										</div>
 									)

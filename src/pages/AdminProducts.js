@@ -53,10 +53,6 @@ export default class Products extends React.Component {
 									key: 'purchases'
 								},
 								{
-									label: 'Views',
-									key: 'views',
-								},
-								{
 									label: 'Date',
 									key: 'date',
 								}

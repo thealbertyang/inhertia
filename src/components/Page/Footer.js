@@ -7,10 +7,10 @@ import Overline from '../Typography/Overline'
 const Footer = () =>
     <div className="footer container-fluid p-5">
       <div className={`row`}>
-        <div className={`col-3 offset-2`}>
-          <img src='/img/shop/logo-footer.png' style={{ height: '5rem', width: 'auto' }}/>
+        <div className={`col-12 col-md-3 offset-md-2`}>
+          <img src='/img/shop/logo-footer.png' style={{ height: '5rem', width: 'auto' }} className='mb-3'/>
         </div>
-        <div className="col-2">
+        <div className="col-12 col-md-2">
           <h6>Customer Service</h6>
           <ul className="nav flex-column px-0 py-2">
             <li className="nav-item">
@@ -25,19 +25,13 @@ const Footer = () =>
             <li className="nav-item">
               <a className="nav-link active p-0" href="/support/privacyPolicy">Privacy Policy</a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link active p-0" href="/support/contact">Contact Us</a>
-            </li>
           </ul>
         </div>
-        <div className="col-2 offset-1">
+        <div className="col-12 col-md-2 offset-md-1">
           <h6>Company</h6>
           <ul className="nav flex-column px-0 py-2">
             <li className="nav-item">
               <a className="nav-link active p-0" href="/about">About Us</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link active p-0" href="/lookbook/2018">2018 Lookbook</a>
             </li>
             <li className="nav-item">
               <a className="nav-link active p-0" href="/guest">Guest Orders</a>
@@ -45,8 +39,9 @@ const Footer = () =>
             <li className="nav-item">
               <a className="nav-link active p-0" href="/account">Account</a>
             </li>
-
-             <li className='d-flex flex-row justify-content-center'><input type='text' className='form-control bg-transparent' placeholder='Enter email to receive goodies!' style={{ marginTop: '0.5rem', borderTop: 'none', borderLeft: 'none', borderRight: 'none', borderBottom: '1px solid #dedede !important' }} /><a href='#' className='pt-3'>💌</a></li>
+            <li className="nav-item">
+              <a className="nav-link active p-0" href="/support/contact">Contact Us</a>
+            </li>
           </ul>
         </div>
         <div className='col-12'>

@@ -12,8 +12,8 @@ const Hero = () =>
           Let Fashion
         </h1>
         <h2 className='font-weight-light text-white'>Discover <b>Places</b>.</h2>
-        <p className='mb-5 text-white-50'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim </p>
-        <a href='/products/new' className='btn btn-primary btn-lg'>
+        <p className='mb-5 text-white-50'>Explore our shop! We offer the latest styles that are inexpensive and cute.</p>
+        <a href='/collection' className='btn btn-primary btn-lg'>
           Shop for latest styles
         </a>
       </div>

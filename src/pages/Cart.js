@@ -30,12 +30,14 @@ export default class CartPage extends React.Component {
 		//params[1] order : account, shipping, payment, confirm
 		return [
 			<Navbar/>,
-			<Header OverlineText={`User`} OverlineClassName='text-muted' TitleText={`Cart`} Height={`15rem`} className={`pt-5`}/>,
-			<Section>
-				{typeof page === 'undefined' && <Component page="CartItems"/>}
-				{page == 'checkout' && <Component page="CartCheckout"/>}
-				{page == 'success' && <Component page="Success"/>}
-			</Section>,
+			page !== 'success' && [
+				<Header OverlineText={`User`} OverlineClassName='text-muted' TitleText={`Cart`} Height={`15rem`} className={`pt-5`}/>,
+				<Section>
+					{typeof page === 'undefined' && <Component page="CartItems"/>}
+					{page == 'checkout' && <Component page="CartCheckout"/>}
+				</Section>,
+			],
+			page == 'success' && <Component page="CartSuccess"/>,
 			<Footer/>
 		]
 	}

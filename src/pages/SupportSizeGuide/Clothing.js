@@ -34,18 +34,9 @@ export default class Index extends React.Component {
 						<div className='col-12 mb-4'>
 							<h3>Clothing</h3>
 						</div>
-						<div className='col-12'>
-								<h6>Bust</h6>
-								<p>Measure under your arms, around the fullest part of your chest. </p>
-								<h6>Waist</h6>
-								<p>Measure around your natural waistline, below your rib cage, leaving the tape a bit loose. </p>
-								<h6>Hip</h6>
-								<p>Measure around the fullest part of your body, above the top of your legs. </p>
-						</div>
 					</div>
 				</div>
 				<div className="col-6">
-					<img src="/img/shop/clothing-measurement.png" alt="Women's clothing size guide" className="w-100" />
 				</div>
 				<div className="col-12 mb-5">
 					<table className="table w-100 measurements responsive table-striped table-hover" style={{ fontFamily: 'Graphik Web' }}>

@@ -20,12 +20,12 @@ export default class Logout extends React.Component {
 		super(props)
 	}
 
-	componentDidMount = () => {
+	componentDidMount = async () => {
 		let { props } = this
-		let { dispatch } = props
+		let { user, dispatch } = props
 
-		console.log('user has role', this.props.user, User.hasRole('admin'))
-		if(User.hasRole('admin')){
+		console.log('user has role', this.props.user, User.hasRole(user, 'admin'))
+		if(User.hasRole(user, 'admin')){
 			User.logout(dispatch)
 			dispatch(redirect('ADMIN','login'))
 		}

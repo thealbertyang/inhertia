@@ -10,6 +10,8 @@ import Footer from '../components/Page/Footer'
 import Navbar from '../components/Page/Navbar'
 
 import * as Cart from '../actions/cart'
+import * as Messages from '../actions/messages'
+
 import { getLocation } from '../actions/index'
 import { fetchData, postData } from '../utils'
 
@@ -18,6 +20,7 @@ import { fetchData, postData } from '../utils'
 	return {
 		cart: store.cart,
 		models: store.models,
+		messages: store.messages,
 		location: store.location,
 		forms: store.forms,
 		user: store.user,
@@ -32,12 +35,24 @@ export default class Checkout extends React.Component {
 	render() {
 		console.log('tjhis. props', this.props)
 		let { props } = this
-		let { user, dispatch } = props
+		let { user, dispatch, messages } = props
 
 		return [
 			<div className='container'>
 				<div className='row'>
+					<div className='col-12'>
+						{messages.checkout && <div className={`alert alert-${messages.checkout.type}`}>{messages.checkout.message}</div>}
+					</div>
 					<div className="col-12 col-md-8">
+						{(user && _.isEmpty(user))
+							? [
+									<h3 className='font-weight-light'>Guest</h3>,
+									<div className='card mb-5'>
+										<div className='card-body'>
+											You are checking out as guest. <a href='/register'>Create</a> an account or <a href='/login'>login</a> to easily track your orders.
+										</div>
+									</div>
+							] : <div>Logged in as</div> }
 						<Shipping/>
 						<Payment/>
 					</div>

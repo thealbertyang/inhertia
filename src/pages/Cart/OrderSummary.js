@@ -5,6 +5,7 @@ import * as _ from 'lodash'
 import { Form, Field } from 'react-final-form'
 
 import * as Cart from '../../actions/cart'
+import * as Messages from '../../actions/messages'
 import { getLocation, redirect } from '../../actions/index'
 
 @connect((store)=>{
@@ -25,7 +26,6 @@ export default class OrderSummary extends React.Component {
 		let { dispatch } = props
 
 		await Cart.loadAmounts(this.props.dispatch)
-
 		await Cart.loadItems(dispatch)
 		await this.loadDiscounts()
 	}
@@ -50,105 +50,6 @@ export default class OrderSummary extends React.Component {
 		await this.loadDiscounts()
 	}
 
-	validateShipping = async () => {
-		let { props } = this
-		let { forms, dispatch } = props
-
-		let isEmpty = (value) => {
-			if(typeof value === 'undefined' || _.isEmpty(value)){
-				return true
-			}
-			else {
-				return false
-			}
-		}
-
-		let fetchOne = (name) => Form.fetchOne({ cart_shipping: name }, forms).value
-		let updateOne = (name, value) => Form.updateOne({ cart_shipping: name }, { value, error: 'This field is required.'}, dispatch)
-		let isEmptyThenUpdate = (name, value) => {
-			value = fetchOne(name)
-			if(isEmpty(value)){
-				updateOne(name, value)
-				return true
-			}
-			else {
-				return false
-			}
-		}
-
-		isEmptyThenUpdate('first_name')
-		isEmptyThenUpdate('last_name')
-		isEmptyThenUpdate('phone')
-		isEmptyThenUpdate('email')
-		isEmptyThenUpdate('line1')
-		isEmptyThenUpdate('line2')
-		isEmptyThenUpdate('city')
-		isEmptyThenUpdate('state')
-		isEmptyThenUpdate('postal_code')
-		isEmptyThenUpdate('country')
-
-		let isValidated = () => {
-			let invalid = _.transform(['first_name', 'last_name', 'phone', 'phone', 'line1', 'line2', 'city', 'state', 'postal_code', 'country'], (result, item) =>{
-				if(isEmptyThenUpdate(item)){
-					//if there are any trues then it means that there is an error
-					result.push('invalid')
-				}
-			}, [])
-			if(_.indexOf(invalid, 'invalid') > -1){
-				return false
-			}
-			else {
-				return true
-			}
-		}
-
-		return isValidated()
-	}
-
-	validatePayment = async () => {
-		let { props } = this
-		let { forms, dispatch } = props
-
-		let isEmpty = (value) => {
-			if(typeof value === 'undefined' || _.isEmpty(value)){
-				return true
-			}
-			else {
-				return false
-			}
-		}
-
-		let fetchOne = (name) => Form.fetchOne({ cart_payment: name }, forms).value
-		let updateOne = (name, value) => Form.updateOne({ cart_payment: name }, { value, error: 'This field is required.'}, dispatch)
-		let isEmptyThenUpdate = (name, value) => {
-			value = fetchOne(name)
-			if(isEmpty(value)){
-				updateOne(name, value)
-				return true
-			}
-			else {
-				return false
-			}
-		}
-
-		let isValidated = () => {
-			let invalid = _.transform(['address_line1', 'address_line2', 'address_city', 'address_state', 'address_zip', 'address_country'], (result, item) =>{
-				if(isEmptyThenUpdate(item)){
-					//if there are any trues then it means that there is an error
-					result.push('invalid')
-				}
-			}, [])
-			if(_.indexOf(invalid, 'invalid') > -1){
-				return false
-			}
-			else {
-				return true
-			}
-		}
-
-		return isValidated()
-	}
-
 	submitOrder = async (e) => {
 		e.preventDefault()
 		let { props } = this
@@ -158,7 +59,26 @@ export default class OrderSummary extends React.Component {
 		//let validPayment = await this.validatePayment()
 
 		//if(validPayment && validShipping){
-			_.isEmpty(user) ? await Cart.submitGuestOrder() : await Cart.submitCustomerOrder(user._id)
+			if(_.isEmpty(user)){
+				 let guestOrder = await Cart.submitGuestOrder()
+				 if(guestOrder.response === 200){
+					 dispatch(redirect('CART', 'success'))
+				 }
+				 else {
+					 console.log('it didnt go thru')
+					 Messages.set('checkout', { type: 'danger', message: guestOrder.message}, dispatch)
+				 }
+			}
+			else {
+				let customerOrder = await Cart.submitCustomerOrder(user._id)
+				if(customerOrder.response === 200){
+					dispatch(redirect('CART', 'success'))
+				}
+				else {
+					console.log('it didnt go thru')
+					Messages.set('checkout', { type: 'danger', message: customerOrder.message}, dispatch)
+				}
+			}
 		//}
 	}
 
@@ -231,7 +151,7 @@ export default class OrderSummary extends React.Component {
 				<div className='card-body pt-0'>
 					<div className='row'>
 						<div className="col-12">
-							{cart.discounts && <Form
+							<Form
 								keepDirtyOnReinitialize={true}
 								onSubmit={this.applyDiscount}
 								mutators={{
@@ -239,7 +159,7 @@ export default class OrderSummary extends React.Component {
 											utils.changeValue(state, 'discount_code', () => '')
 										},
 									}}
-									initialValues={cart.discounts[0]}
+									initialValues={cart.discounts && cart.discounts[0]}
 								render={({
 									mutators,
 									submitError,
@@ -262,7 +182,7 @@ export default class OrderSummary extends React.Component {
 										</Field>
 									</form>
 								)}
-							/>}
+							/>
 						</div>
 					</div>
 				</div>

@@ -26,36 +26,19 @@ export default class AccountProfile extends React.Component {
 		super(props)
 	}
 
-	componentDidUpdate = (prevProps) => {
-		let { props } = this
-		let { forms, user, dispatch } = props
-		if(prevProps && user){
-			let prevUser = prevProps.user
-			let thisUser = user
-			let isEqual =  _.isEqual(thisUser, prevUser)
-
-			if(!isEqual){
-				User.isEmailVerified(user)
-			}
-		}
-		console.log('this profile', this.props, User.isEmailVerified())
-	}
-
-
-
 	render() {
 		let { props } = this
 		let { forms, user, dispatch } = props
 		return [
-			<div className={`row ${_.has(user, '_id') ? (User.isEmailVerified(user) ? '' : 'disabled') : ''}`}>
+			<div className={`row ${_.has(user, '_id') ? (User.isEmailVerified(user) ? '' : '') : ''}`}>
 				<div className='col-12 mb-5'>
 					<Account/>
 				</div>
 				<div className='col-12 mb-5'>
-					<Shipping/>
+					{(typeof this.props.user.customer !== 'undefined') && <Shipping/>}
 				</div>
 				<div className='col-12 mb-5'>
-					<Payment/>
+						{(typeof this.props.user.customer !== 'undefined') && <Payment/>}
 				</div>
 			</div>
 		]

@@ -1,4 +1,5 @@
 import Product from '../models/Product';
+import User from '../models/User';
 import ProductCategory from '../models/ProductCategory';
 import * as _ from 'lodash'
 import formidable from 'formidable'
@@ -13,12 +14,124 @@ const fs = require('fs'), gm = require('gm').subClass({imageMagick: true});
  * @returns void
  */
 export function getAll(req, res) {
-  Product.find().sort('-dateAdded').exec((err, model) => {
+  Product.find().sort('-dateAdded').lean().exec(async (err, models) => {
     if (err) {
       res.status(500).send(err);
     }
-    return res.status(200).json({ message: 'Found models', response: 200, data: model })
+
+    console.log('models', models)
+
+    await Promise.all(models.map(async(model, key)=>{
+      console.log('item', model.reviews)
+      let ratings = 0;
+
+      if(!_.isEmpty(model.reviews)){
+        let result = await Promise.all(model.reviews.map(async (item, index)=>{
+          console.log('item', item)
+          console.log('model', model)
+
+          ratings += item.rating
+
+          console.log('ratings1', item.rating)
+
+          let user = await User.findOne({ _id: item.user_id }, function (error, user){
+            if (error || !user) { return error }
+            else {
+              return user
+            }
+          })
+
+          models[key].reviews[index].user = user
+        }))
+      }
+
+      ratings = ratings / model.reviews.length
+
+      console.log('ratings', ratings)
+      models[key].ratings = ratings
+
+      console.log('model', models)
+
+
+    }))
+
+    return res.status(200).json({ message: 'Found models', response: 200, data: models })
   });
+}
+
+
+export function getLatest(req, res) {
+  Product.find({ status: 'published' }).sort('-dateAdded').lean().exec(async (err, models) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+
+    console.log('models', models)
+
+    await Promise.all(models.map(async(model, key)=>{
+      console.log('item', model.reviews)
+      let ratings = 0;
+
+      if(!_.isEmpty(model.reviews)){
+        let result = await Promise.all(model.reviews.map(async (item, index)=>{
+          console.log('item', item)
+          console.log('model', model)
+
+          ratings += item.rating
+
+          console.log('ratings1', item.rating)
+
+          let user = await User.findOne({ _id: item.user_id }, function (error, user){
+            if (error || !user) { return error }
+            else {
+              return user
+            }
+          })
+
+          models[key].reviews[index].user = user
+        }))
+      }
+
+      ratings = ratings / model.reviews.length
+
+      console.log('ratings', ratings)
+      models[key].ratings = ratings
+
+      console.log('model', models)
+
+
+    }))
+
+    /*let ratings = 0;
+
+    if(!_.isEmpty(model.reviews)){
+      let result = await Promise.all(model.reviews.map(async (item, index)=>{
+        console.log('item', item)
+        console.log('model', model)
+
+        ratings += item.rating
+
+        console.log('ratings1', item.rating)
+
+        let user = await User.findOne({ _id: item.user_id }, function (error, user){
+          if (error || !user) { return error }
+          else {
+            return user
+          }
+        })
+
+        model.reviews[index].user = user
+      }))
+    }
+
+    //ratings = ratings / model.reviews.length
+
+    console.log('ratings', ratings)
+    console.log('ratings length', model.reviews)
+    model.ratings = ratings*/
+
+    return res.status(200).json({ message: 'Found models', response: 200, data: models })
+  })
 }
 
 
@@ -71,24 +184,17 @@ export function getRelated(req, res) {
   //let reqBody = _.mapValues(req.body, v=>v.value)
   console.log('got hereS')
 
-  Product.findOne({ _id: req.params.id }).sort('-dateAdded').exec((err, model) => {
+  Product.find({}).sort('-dateAdded').exec((err, model) => {
     if (err) {
       res.status(500).send(err);
     }
-
-    //return res.status(200).json({ message: 'Found models', response: 200, data: _.random(0, model.product_category_ids.length) })
-
-    let key = _.random(0, (model.product_category_ids.length - 1));
-
-    Product.find({ product_category_ids: model.product_category_ids[key] }).sort('-dateAdded').exec((err, model) => {
-      if (err) {
-        res.status(500).send(err);
-      }
-      return res.status(200).json({ message: 'Found models', response: 200, data: model })
-    })
+    console.log('_id', req.params.id)
+    return res.status(200).json({ message: 'Found models', response: 200, data: model })
   })
 
 }
+
+
 
 
 export function search(req, res, next) {
@@ -226,6 +332,7 @@ export function getPublished(req, res) {
   });
 }
 
+
 /**
  * Save a model
  * @param req
@@ -327,22 +434,73 @@ export function create(req, res, next) {
 }
 
 export function getOne(req, res, next){
-  console.log('req params', req.params)
-  Product.findOne({ _id: req.params.id }, function (error, model) {
-    if (error || !model) {``
-      return res.status(400).json({ status: 'error', response: 401, message: 'Error with finding single model. '+error});
+  Product.findOne({ _id: req.params.id }).lean().exec(async (error, model) =>{
+    if (error || !model) {
+      return res.status(400).json({ status: 'error', response: 400, message: 'Error with finding single model. '+error});
     } else {
+
+      let ratings = 0;
+
+      if(!_.isEmpty(model.reviews)){
+        let result = await Promise.all(model.reviews.map(async (item, index)=>{
+          console.log('item', item)
+          console.log('model', model)
+
+          ratings += item.rating
+
+          console.log('ratings1', item.rating)
+
+          let user = await User.findOne({ _id: item.user_id }, function (error, user){
+            if (error || !user) { return error }
+            else {
+              return user
+            }
+          })
+
+          model.reviews[index].user = user
+        }))
+      }
+
+      ratings = ratings / model.reviews.length
+
+      console.log('ratings', ratings)
+      model.ratings = ratings
+
       return res.status(200).json({ status: 'success', response: 200, message: 'Found single model.', data: model });
     }
   })
 }
 
 export function getBySlug(req, res, next){
-  console.log('req params', req.params)
-  Product.findOne({ slug: req.params.slug }, function (error, model) {
+  Product.findOne({ slug: req.params.slug }).lean().exec(async (error, model) => {
     if (error || !model) {``
-      return res.status(400).json({ status: 'error', response: 401, message: 'Error with finding single model. '+error});
+      return res.status(400).json({ status: 'error', response: 400, message: 'Error with finding single model. '+error});
     } else {
+      let ratings = 0;
+      if(!_.isEmpty(model.reviews)){
+        let result = await Promise.all(model.reviews.map(async (item, index)=>{
+          ratings += item.rating
+          let user = await User.findOne({ _id: item.user_id }, function (error, user){
+            if (error || !user) { return error }
+            else {
+              return user
+            }
+          })
+          model.reviews[index].user = user
+        }))
+      }
+      ratings = ratings / model.reviews.length
+      model.ratings = Math.round(ratings)
+
+      let related = await Product.find({}).lean().exec((error, models)=>{
+        models.map((item, index)=>{
+            if(item.slug === req.params.slug){
+              models.splice(index, 1)
+            }
+        })
+      })
+      model.related = related
+      console.log('related', related)
       return res.status(200).json({ status: 'success', response: 200, message: 'Found single model.', data: model });
     }
   })
@@ -358,6 +516,57 @@ export function getByIds(req, res, next){
       return res.status(200).json({ status: 'success', response: 200, message: 'Found single model.', data: model });
     }
   })
+}
+
+export function createReview(req, res, next) {
+  var form = new formidable.IncomingForm(),
+          files = [],
+          fields = {},
+          images = []
+
+      form.on('field', function(field, value){
+        console.log('fields inside', field, value)
+        fields = {...fields, [field]: value }
+      })
+
+      form.parse(req, async function(err) {
+        console.log('fields', fields)
+        console.log('files', files)
+
+        await Product.findOneAndUpdate({"_id": req.params.id}, { $push: { reviews: { user_id: fields.user_id, comment: fields.comment, rating: fields.rating } } }, { safe: true, upsert: true, new: true }, function (error, model) {
+            if (error || !model) {
+              return res.status(400).json({ message: error.message, response: 400 })
+            } else {
+              return res.status(200).json({ status: 'success', response: 200, message: 'Success with edit.', data: model });
+            }
+        })
+     })
+}
+
+
+export function removeReview(req, res, next) {
+  var form = new formidable.IncomingForm(),
+          files = [],
+          fields = {},
+          images = []
+
+      form.on('field', function(field, value){
+        console.log('fields inside', field, value)
+        fields = {...fields, [field]: value }
+      })
+
+      form.parse(req, async function(err) {
+        console.log('fields', fields)
+        console.log('files', files)
+
+        await Product.findOneAndUpdate({"_id": req.params.id}, { reviews: fields }, {new: true}, function (error, model) {
+            if (error || !model) {
+              return res.status(400).json({ message: error.message, response: 400, data: inputs })
+            } else {
+              return res.status(200).json({ status: 'success', response: 200, message: 'Success with edit.', data: model });
+            }
+        })
+     })
 }
 
 export function update(req, res, next) {
@@ -465,7 +674,7 @@ export function update(req, res, next) {
 export function remove(req, res, next){
   Product.findOneAndRemove({"_id": req.params.id}, function (error, model) {
     if (error || !model) {
-      return res.status(400).json({ status: 'error', response: 401, message: 'Error with model delete. '+error});
+      return res.status(400).json({ status: 'error', response: 400, message: 'Error with model delete. '+error});
     } else {
       Product.find().sort('-dateAdded').exec((err, model) => {
         if (err) {

@@ -5,21 +5,27 @@ import * as _ from 'lodash'
 import Footer from '../../components/Page/Footer'
 import Card from '../../components/Page/Card'
 import Navbar from '../../components/Page/Navbar'
-import { Form, Input, Password } from '../../components/Form'
+import { Form, Field } from 'react-final-form'
+
 
 import * as Cart from '../../actions/cart'
 import * as User from '../../actions/user'
+import * as Forms from '../../actions/forms'
 import { getLocation, redirect } from '../../actions/index'
 import { fetchData, postData } from '../../utils'
 
 import MyStoreCheckout from '../../components/Stripe/MyStoreCheckout'
 import {StripeProvider} from 'react-stripe-elements'
+import { OnChange } from 'react-final-form-listeners'
+
+
 
 @connect((store)=>{
 	return {
 		cart: store.cart,
 		models: store.models,
 		location: store.location,
+		form: store.form,
 		forms: store.forms,
 		user: store.user,
 		jwtToken: store.jwtToken,
@@ -28,19 +34,21 @@ import {StripeProvider} from 'react-stripe-elements'
 export default class Payment extends React.Component {
 	constructor(props){
 		super(props)
-		this.state = { status: 'view', stripe: null }
 	}
 
+	state = { stripe: null }
+
 	componentDidMount = async () => {
-		this.setState({ stripe: window.Stripe('pk_test_vixzu5CoMlSioGsG2IgGD2Z4') });
-	}
+    this.setState({ stripe: window.Stripe('pk_test_vixzu5CoMlSioGsG2IgGD2Z4') });
+  }
+
 
 	createPaymentToken = (e, stripe) => {
 
 		let { props } = this
-		let { user, forms, models, location, dispatch } = props
+		let {  user, forms, models, location, dispatch } = props
 
-		console.log('forms', forms['addPayment'])
+		console.log('forms', forms)
 		console.log('got stripe', stripe)
 		/*
 
@@ -53,14 +61,27 @@ export default class Payment extends React.Component {
 			address_country:
 		*/
 
-		let inputs = forms['addPayment'].inputs
 
-		if(!_.isEmpty(inputs)){
-  			inputs = _.mapValues(inputs, v=>v.value)
+		let { name, address_line1,
+			address_line2,
+			address_city,
+			address_state,
+			address_zip,
+			address_country } = forms.payment.values
 
+			console.log('address_line1', address_line1)
+			console.log('address_line2', address_line2)
+			console.log('address_citya', address_city)
 			stripe.createToken({
-		      name: user.first_name+'_'+user.last_name,
-		      card: {...inputs},
+		      name: name,
+		      card: {
+						address_line1,
+						address_line2,
+						address_city,
+						address_state,
+						address_zip,
+						address_country
+					}
 		    }).then( async ({token}) => {
 
 		      console.log('Received Stripe token:', token, this.props, this);
@@ -70,114 +91,72 @@ export default class Payment extends React.Component {
      			console.log('after', this.props)
 
 		    })
-     // this.props.dispatch(Crud.setPageModel('customerCard', { value: token.card.id }))
-
-      //Save token to shop redux props cart token
-
-
-      //once you get cart token save it to customer user token
-
-      //what if it is a guest??
-
-      //Shop.submitOrder(token)
 
 
     // However, this line of code will do the same thing:
     // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
-		}
-	}
-	addPayment = (e) => {
-		e.preventDefault()
-		//get user and insert to form inputs
-		let { props } = this
-		let { user, dispatch } = props
-
-		let inputs = {
-			address_line1: '',
-			address_line2: '',
-			address_city: '',
-			address_state: '',
-			address_zip: '',
-			address_country: '',
-		}
-
-		inputs = _.mapValues(inputs, (v,k)=>{
-	        return ({ value: v })
-  		})
-
-		Form.set({ name: 'addPayment', inputs: inputs, status: '', message: '', dispatch })
-		this.setState({ status: 'manage' })
 	}
 
 	deleteCustomerShipping = async (e, id) => {
 		let { props } = this
 		let { user, dispatch } = props
 		e.preventDefault()
-		console.log('ID', id)
-		let deleteCustomerShipping = await postData(`/api/customer/shipping/delete/${user.customer._id}`, { shipping_id: { value: id } } )
+		let deleteCustomerShipping = await postData(`/api/user/customer/payment/delete/${user.customer._id}`, { payment_id: id } )
 		if(deleteCustomerShipping.response === 200){
-			User.authToken(null, dispatch)
+			User.authToken({ dispatch })
 		}
 	}
 
-	loadCreate = async () => {
-		let { props } = this
-		let { cart, forms, models, location, dispatch } = props
-		let { base, page, method, params } = getLocation(location)
 
-		let patchCustomerShipping = await this.addCustomerPayment()
-		if(patchCustomerShipping.response === 200){
-			//Form.set(, 'success', 'Successfully saved.' )
-			//redirect('ACCOUNT', 'profile')
-			Form.set({ name: 'addPayment', inputs: {...forms['addPayment'].inputs, token: { value: cart.token } }, status: '', message: '', dispatch })
-			User.authToken(null, dispatch)
-			this.setState({ status: 'view' })
-		}
-		else {
-			//this.set(patchOne.data, 'error', 'Error with saving.')
-		}
+	updateModel = async (id, token) => {
+		return await postData(`/api/user/customer/payment/create/${this.props.user.customer._id}`, { token: token })
 	}
 
-	addCustomerPayment = async (e) => {
-		let { props } = this
-		let { cart, forms, user } = props
-		return await postData(`/api/customer/payment/create/${user.customer._id}`, { token: { value: cart.token } })
-	}
+	onSubmitCreate = async (values) => {
+    let { props } = this
+    let { cart, user, dispatch } = props
+    let id = this.props.user._id
 
-	componentDidUpdate = () => {
-		/*
-
-			if form edit profile is submitting
-			then postData to customer route
-			if successfull then redirect and message
-
-		*/
-		let { props } = this
-		let { location, forms } = props
-		let { page, method } = getLocation(location)
-		Form.didSubmit({ name: 'addPayment', form: forms['addPayment'] }) && this.loadCreate()
-	}
+		console.log('TOKEN', cart)
+    let update = await this.updateModel(id, cart.token)
+    if(update.response === 200){
+      User.authToken({ dispatch })
+    }
+    else {
+    }
+  }
 
 	render() {
 		let { props } = this
 		let { user, location } = props
 		let { page, method } = getLocation(location)
 
+		console.log('this form', this.props)
 		return [
-		<Form name={`addPayment`}>
+			<Form
+				keepDirtyOnReinitialize={true}
+				onSubmit={this.onSubmitCreate}
+				mutators={{
+						setName: (args, state, utils) => {
+							utils.changeValue(state, 'name', () => 1)
+						},
+					}}
+				render={({ mutators, submitError, submitting, handleSubmit, pristine, invalid, values }) => {
+					return (
+					<form onSubmit={handleSubmit} id={`editShippingForm`} autoComplete="none">
+					<input type="hidden" value="something"/>
 					<Card
+						className='mb-4'
 						body={[
 							<div className='row'>
 								<div className='col-6'>
-									<h6 className='card-title'>Payment</h6>
+									<h6 className='card-title'>Payments</h6>
 								</div>
 								<div className='col-6 text-right'>
-									{this.state.status == 'view' && (<a href='#' onClick={(e)=>{ this.addPayment(e) }}>Add</a>)}
-									{this.state.status == 'manage' && (<button type='submit' className='btn btn-small py-1 btn-outline-success'>Save</button>)}
 								</div>
 							</div>,
-							user.customer && user.customer.stripe_customer && !_.isEmpty(user.customer.stripe_customer.sources.data) ? _.map(user.customer.stripe_customer.sources.data, (item, key, arr)=>{
-									return (
+							_.has(user,'customer.stripe_customer') && !_.isEmpty(user.customer.stripe_customer.sources.data) ? _.map(user.customer.stripe_customer.sources.data, (item, key, arr)=>{
+									return [
 										<div className='row'>
 											<div className='col-1 d-flex align-items-center'>
 												<i className='material-icons text-success'>check_circle</i>
@@ -189,56 +168,169 @@ export default class Payment extends React.Component {
 												<small className='text-secondary'>Ending in</small>&nbsp; {item.last4}
 											</div>
 											<div className='col-1 d-flex flex-column align-items-center justify-content-end'>
-												<a href='#' onClick={(e)=>{ e.preventDefault(); this.deleteCustomerShipping(user.customer_id, item._id)}}><i className='material-icons text-secondary'>delete</i></a>
+												<a href='#' onClick={(e)=>{ this.deleteCustomerShipping(e, item.id)}}><i className='material-icons text-secondary'>delete</i></a>
 											</div>
 										</div>
-									)
+									]
 								})
 								:
 									(
-										<p>You haven't saved any payment methods.</p>
+										<div className='row'>
+											<div className='col-12'>
+												<p className='mb-0'>You haven't saved any payment methods.</p>
+											</div>
+										</div>
 									)
 						]}
 					/>
+					<Card
+						body={[
+							<div className='row py-2'>
+								<div className='col-12'>
+									<h6>Add Payment</h6>
+								</div>
+								<div className='form-group col-12'>
+									<Field
+										name={`name`}
+										component="input"
+										type='text'
+										placeholder="Name on Card"
+										className="form-control"
+										autoComplete="none"
+									/>
+									<OnChange name={'name'}>
+										{(value, previous) => {
+											// do something
+												if(value !== previous && previous){
+													Forms.setOne('payment', 'name', value, this.props.dispatch )
+												}
+										}}
+									 </OnChange>
 
-			{
-				(this.state.status == 'manage') &&
-					(
-						<div className='row'>
-							<div className='form-group col-8'>
-								<Input label='Street Address' name='address_line1'/>
-							</div>
+								</div>
+								<div className='form-group col-8'>
+									<Field
+										name={`address_line1`}
+										component="input"
+										type='text'
+										placeholder="Street Address"
+										className="form-control"
+									/>
+									<OnChange name={'address_line1'}>
+										{(value, previous) => {
+											// do something
+												if(value !== previous && previous){
+													Forms.setOne('payment', 'address_line1', value, this.props.dispatch )
+												}
+										}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-4'>
-								<Input type='text' label='Apt, Suite, etc..' name='address_line2'/>
-							</div>
+								<div className='form-group col-4'>
+									<Field
+										name={`address_line2`}
+										component="input"
+										type='text'
+										placeholder="Apt, Suite, etc.."
+										className="form-control"
+									/>
+									<OnChange name={'address_line2'}>
+											{(value, previous) => {
+												// do something
+													if(value !== previous && previous){
+														Forms.setOne('payment', 'address_line2', value, this.props.dispatch )
+													}
+											}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-4'>
-								<Input type='text' label='City' name='address_city'/>
-							</div>
+								<div className='form-group col-4'>
+									<Field
+										name={`address_city`}
+										component="input"
+										type='text'
+										placeholder="City"
+										className="form-control"
+									/>
+									<OnChange name={'address_city'}>
+											{(value, previous) => {
+												// do something
+													if(value !== previous && previous){
+														Forms.setOne('payment', 'address_city', value, this.props.dispatch )
+													}
+											}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-2'>
-								<Input type='text' label='State' name='address_state'/>
-							</div>
+								<div className='form-group col-2'>
+									<Field
+										name={`address_state`}
+										component="input"
+										type='text'
+										placeholder="State"
+										className="form-control"
+									/>
+									<OnChange name={'address_state'}>
+											{(value, previous) => {
+												// do something
+													if(value !== previous && previous){
+														Forms.setOne('payment', 'address_state', value, this.props.dispatch )
+													}
+											}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-3'>
-								<Input type='text' label='Postal Code' name='address_zip'/>
-							</div>
+								<div className='form-group col-3'>
+									<Field
+										name={`address_zip`}
+										component="input"
+										type='text'
+										placeholder="Postal Code"
+										className="form-control"
+									/>
+									<OnChange name={'address_zip'}>
+											{(value, previous) => {
+												// do something
+													if(value !== previous && previous){
+														Forms.setOne('payment', 'address_zip', value, this.props.dispatch )
+													}
+											}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-3'>
-								<Input type='text' label='Country' name='address_country'/>
-							</div>
+								<div className='form-group col-3'>
+									<Field
+										name={`address_country`}
+										component="input"
+										type='text'
+										placeholder="Country"
+										className="form-control"
+									/>
+									<OnChange name={'address_country'}>
+											{(value, previous) => {
+												// do something
+													if(value !== previous && previous){
+														Forms.setOne('payment', 'address_country', value, this.props.dispatch )
+													}
+											}}
+									 </OnChange>
+								</div>
 
-							<div className='form-group col-12'>
-								<StripeProvider stripe={this.state.stripe}>
-						      		<MyStoreCheckout handleSubmit={(e,stripe)=>this.createPaymentToken(e, stripe)}/>
-						    	</StripeProvider>
-						    </div>
+								<div className='form-group col-12'>
+									<StripeProvider stripe={this.state.stripe}>
+										<MyStoreCheckout handleSubmit={(e,stripe)=>this.createPaymentToken(e, stripe)}/>
+									</StripeProvider>
+								</div>
 
-					    </div>
-					)
-			}
-		</Form>
+								<div className='form-group col-6'>
+									<button type='submit' className='btn btn-small py-1 btn-primary'>Save</button>
+								</div>
+						 </div>
+						]}
+					/>
+				</form>
+			)}}
+			/>
 		]
 	}
 

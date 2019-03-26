@@ -30,18 +30,8 @@ export default class Index extends React.Component {
 							<div className='col-12 mb-4'>
 								<h3>FAQ</h3>
 							</div>
-							<div className='col-12 mb-4'>
+							<div className='col-12'>
 								<h6 className='mb-4'>Questions</h6>
-								<div className='card'>
-									<div className='card-header'>
-										<a id='shop-type'>
-											Are we a shopify store?
-										</a>
-									</div>
-									<div className='card-body'>
-									 We are a custom built store catered to the contemporay generation.
-									</div>
-								</div>
 							</div>
 							<div className='col-12 mb-4'>
 								<div className='card' style={{ border: (params[0] == 'shipping' ? '1px solid #52bf52' : '') }}>

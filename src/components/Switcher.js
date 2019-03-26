@@ -11,6 +11,7 @@ import isLoading from '../selectors/isLoading'
 import Setup from '../pages/Setup'
 
 import * as User from '../actions/user'
+import * as Cart from '../actions/cart'
 import * as Models from '../actions/models'
 import { fetchData } from '../utils'
 import { getLocation, redirect } from '../actions/index'
@@ -26,6 +27,7 @@ const UniversalComponent = universal(({ page }) => import(`../pages/${page}`), {
   return {
     forms: store.forms,
     user: store.user,
+    cart: store.cart,
     jwtToken: store.jwtToken,
     page: store.page,
     direction: store.direction,
@@ -79,7 +81,35 @@ export default class Switcher extends React.Component {
 
   	}
 
+    componentDidMount = () => {
+      let { props } = this
+      let { models, dispatch } = props
+
+      User.authToken({ dispatch })
+      Cart.loadItems(dispatch)
+      document.addEventListener('keydown', this.handleKeyDown);
+    }
+
+    componentDidUpdate(nextProps){
+        console.log('switcher', nextProps, this.props)
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    handleKeyDown = (e) => {
+      console.log(e)
+
+      if(e.key === 'a' && e.ctrlKey === true){
+        this.props.dispatch(redirect('ADMIN'))
+      }
+    }
+
+
   render() {
+
+    console.log('cart', this.props)
     let { props } = this
     let { direction, page, isLoading } = props
 

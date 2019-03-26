@@ -32,11 +32,11 @@ export const postData = async (path, form, jwtToken) =>{
         }
       })
     }
-    else if(_.isArray(item) && _.isArray(item.value)){
-      form[key] && formData.append(key, JSON.stringify(item.value))
+    else if(_.isArray(item) && _.isArray(item)){
+      form[key] && formData.append(key, JSON.stringify(item))
     }
     else if(typeof item === 'object'){
-      form[key] && formData.append(key, JSON.stringify(item.value))
+      form[key] && formData.append(key, JSON.stringify(item))
     }
     else {
       form[key] && formData.append(key, form[key])

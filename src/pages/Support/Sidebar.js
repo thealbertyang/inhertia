@@ -21,28 +21,6 @@ export default class Sidebar extends React.Component {
 		return [
 			<div className='sidebar row'>
 				<div className='col-sm-6 col-md-12'>
-					<div className='card border-primary mb-4'>
-						<div className='card-body'>
-							<div className='row'>
-								<div className='col-12'>
-									<h6 className='card-title mb-0'>
-										Sizes
-									</h6>
-								</div>
-							</div>
-						</div>
-						<ul className="list-group list-group-flush">
-							<li className="list-group-item">
-								<a class={(method == 'clothing' || !method) && 'active'} href="/support/sizeGuide/clothing">Clothing</a>
-							</li>
-							<li className="list-group-item">
-								<a class={`${(method == 'jeansAndTrousers') && 'active'}`} href="/support/sizeGuide/jeansAndTrousers">Jeans &amp; Trousers</a>
-							</li>
-							<li className="list-group-item">
-								<a class={`${(method == 'shoes') && 'active'}`} href="/support/sizeGuide/shoes">Shoes</a>
-							</li>
-						</ul>
-					</div>
 					<div className='card border-primary mb-5'>
 						<div className='card-body'>
 							<div className='row'>
@@ -58,6 +36,9 @@ export default class Sidebar extends React.Component {
 								<a class={`${(typeof method === 'undefined' || !method) && 'active'}`} href="/support/faq">FAQ</a>
 							</li>
 							<li className="list-group-item">
+								<a class={(method == 'clothing' || !method) && 'active'} href="/support/sizeGuide/clothing">Sizes</a>
+							</li>
+							<li className="list-group-item">
 								<a class={`${(method == 'deliveryAndShipping' || !method) && 'active'}`} href="/support/deliveryAndShipping">Delivery &amp; Shipping</a>
 							</li>
 							<li className="list-group-item">
@@ -69,6 +50,7 @@ export default class Sidebar extends React.Component {
 							<li className="list-group-item">
 								<a class={`${(method == 'contact') && 'active'}`} href="/support/contact">Contact</a>
 							</li>
+
 						</ul>
 					</div>
 				</div>

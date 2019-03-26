@@ -164,13 +164,13 @@ export const loadPayment = async (dispatch) => {
 /* CART TOKEN */
 
 export const updateToken = async (token, dispatch) => {
-	let payment = !_.isEmpty(fetchCookie('cart_payment')) ? fetchCookie('cart_payment') : {}
-	payment.token = token
+	//let payment = !_.isEmpty(fetchCookie('cart_payment')) ? fetchCookie('cart_payment') : {}
+	//payment.token = token
 	dispatch({
 		type: 'CART_TOKEN_SET',
 		token: token,
 	})
-	return setCookie('cart_payment', payment)
+	//return setCookie('cart_payment', payment)
 }
 
 /* CART SHIPPING */
@@ -221,7 +221,7 @@ export const fetchDiscounts = async () => {
 	}, [])
 
 
-	let discountsData = await postData(`/api/discounts/decrypt/`, { discount_codes: { value: discountsCodes } })
+	let discountsData = await postData(`/api/discounts/decrypt/`, { discount_codes: discountsCodes })
 	if(discountsData.response === 200){
 		let mergedData = _.transform(discounts, function(result, item) {
 			if(!_.isEmpty(item) && item !== null){
@@ -405,7 +405,7 @@ export const submitGuestOrder = async () => {
 	let shipping = await fetchShipping()
 	let payment = await fetchPayment()
 
-	let guestOrder = await postData(`/api/order/guest/create`, { cart: { value: { items, discounts, shipping, payment } } })
+	let guestOrder = await postData(`/api/order/guest/create`, { cart: { items, discounts, shipping, payment } })
 	if(guestOrder.response === 200){
 		console.log('guest order success;')
     deleteCookie('cart_items')
@@ -413,15 +413,18 @@ export const submitGuestOrder = async () => {
     deleteCookie('cart_payment')
     deleteCookie('cart_discounts')
 	}
+
+	return guestOrder
 }
 
 export const submitCustomerOrder = async (userId) => {
+	//is it saved or new pass token.id or customer.id card.// id
 	let items = !_.isEmpty(fetchCookie('cart_items')) ? fetchCookie('cart_items') : []
 	let discounts = !_.isEmpty(fetchCookie('cart_discounts')) ? fetchCookie('cart_discounts') : []
 	let shipping = await fetchShipping()
 	let payment = await fetchPayment()
 
-	let customerOrder = await postData(`/api/order/create/${userId}`, { cart: { value: { items, discounts, shipping, payment } } })
+	let customerOrder = await postData(`/api/order/create/${userId}`, { cart: { items, discounts, shipping, payment } })
 	if(customerOrder.response === 200){
 		console.log('customer order success;')
     deleteCookie('cart_items')
@@ -429,4 +432,6 @@ export const submitCustomerOrder = async (userId) => {
     deleteCookie('cart_payment')
     deleteCookie('cart_discounts')
 	}
+
+	return customerOrder
 }

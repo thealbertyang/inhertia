@@ -9,11 +9,13 @@ import Overline from '../components/Typography/Overline'
 
 import { getLocation, redirect } from '../actions/index'
 import * as User from '../actions/user'
+import * as Messages from '../actions/messages'
 
 import { postData } from '../utils'
 
 @connect((store)=>{
 	return {
+		messages: store.messages,
 		user: store.user,
 		location: store.location,
 	}
@@ -22,6 +24,12 @@ import { postData } from '../utils'
 export default class Login extends React.Component {
 	constructor(props){
 		super(props)
+	 	window.addEventListener("resize", this.update)
+	}
+
+	state = {
+	 height: 0,
+	 width: 0
 	}
 
 	componentDidMount = async () => {
@@ -32,7 +40,16 @@ export default class Login extends React.Component {
 		if(!_.isEmpty(authToken)){
 			dispatch({ type: 'ADMIN' })
 		}
+
+		this.update()
 	}
+
+	update = () => {
+    this.setState({
+      height: window.innerHeight,
+      width: window.innerWidth
+    })
+  }
 
 	authenticate = async (fields) => {
 		let { props } = this
@@ -44,7 +61,7 @@ export default class Login extends React.Component {
 			dispatch({ type: 'ADMIN' })
 		}
 		else {
-			 return { [FORM_ERROR]: "Login Failed." }
+			Messages.set('Login', { type: 'danger', message: 'Login failed.'}, dispatch)
 		}
 	}
 
@@ -54,13 +71,14 @@ export default class Login extends React.Component {
 
 	render(){
 		let { props } = this
-		let { location } = props
+		let { messages, location } = props
 		let { base, page, method, params } = getLocation(location)
 
+		let backgroundImage = this.state.width >= 768 ? `/img/shop/LoginSide.png` : ''
 		return [
 				<Navbar/>,
-        <Section className={`flex-fill px-5 align-items-center d-flex`} Name={`hero`} BackgroundColor={`#ffffff`} BackgroundImage={`/img/shop/LoginSide.png`} BackgroundSize={`contain`} BackgroundPosition={`25% center`} Height={`50rem`}>
-					<div className={`col-3 offset-6`}>
+        <Section className={`flex-fill px-5 align-items-center d-flex`} Name={`hero`} BackgroundColor={`#ffffff`} BackgroundImage={backgroundImage} BackgroundSize={`contain`} BackgroundPosition={`25% center`} Height={`50rem`}>
+					<div className={`col-12 col-md-3 offset-md-6`}>
 						<Overline>
 							Admin
 						</Overline>
@@ -88,7 +106,7 @@ export default class Login extends React.Component {
 								values
 							}) => (
 								<form onSubmit={handleSubmit}>
-									{submitError && <div className="alert alert-danger" role="alert">{submitError}</div>}
+									{messages.Login && <div className={`alert alert-${messages.Login.type}`}>{messages.Login.message}</div>}
 									<div className="form-row my-4">
 										<div className="form-group col-12">
 											<Field name="username">
