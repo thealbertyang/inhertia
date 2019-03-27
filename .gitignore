@@ -5,3 +5,6 @@ buildServer
 webpack
 assets
 package.json
+docker-compose.yml
+config
+.gitgnore
