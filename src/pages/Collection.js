@@ -77,6 +77,7 @@ export default class Collection extends React.Component {
 												ratings={`visible`}
 												price={item.price}
 												ratings={item.ratings}
+												id={item._id}
 											/>
 										</div>
 									)

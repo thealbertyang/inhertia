@@ -5,7 +5,6 @@ import * as _ from 'lodash'
 
 import Card from '../../components/Admin/Card'
 import Header from '../../components/Admin/Header'
-
 import { Form, Field } from 'react-final-form'
 
 import { fetchData, postData } from '../../utils'

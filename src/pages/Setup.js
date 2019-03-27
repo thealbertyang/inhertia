@@ -6,8 +6,6 @@ import * as User from '../actions/user'
 
 import Edit from './Setup/Edit'
 
-import { Form, Input } from '../components/Form'
-
 @connect((store)=>{
 	return {
 		forms: store.forms,

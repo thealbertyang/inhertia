@@ -227,7 +227,6 @@ export default class Edit extends React.Component {
 										</div>
 									]}
 								/>
-								<pre>{JSON.stringify(values, 0, 2)}</pre>
 
 							</div>
 						</form>

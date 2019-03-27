@@ -96,7 +96,7 @@ export const forgotPassword = async (email) => {
 }
 
 export const resetPassword = async (token, inputs) => {
-	let user = await postData('/api/user/resetPassword', { ...inputs, token: { value: token } })
+	let user = await postData('/api/user/resetPassword', { ...inputs, token })
 	return user
 }
 

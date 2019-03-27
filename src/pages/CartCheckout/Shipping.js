@@ -102,6 +102,13 @@ export default class Shipping extends React.Component {
 						utils.changeValue(state, 'name', () => 1)
 					},
 				}}
+				validate={values => {
+					const errors = {};
+					if (!values.email) {
+						errors.email = "Required";
+					}
+					return errors;
+				}}
 				initialValues={cart.shipping}
 				onSubmit={this.onSubmit}
 				render={({ values, handleSubmit, onChange }) => (
@@ -143,13 +150,14 @@ export default class Shipping extends React.Component {
 									<label>
 										First Name
 									</label>
-									<Field
-										name="first_name"
-										component="input"
-										type="text"
-										placeholder="First Name"
-										className="form-control"
-									/>
+									<Field name="first_name">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="First Name" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
+
 									<OnChange name={`first_name`}>
 					            {(value, previous) => {
 													if(value !== previous){
@@ -162,13 +170,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Last Name
 									</label>
-									<Field
-			              name="last_name"
-			              component="input"
-			              type="text"
-			              placeholder="Last Name"
-										className="form-control"
-			            />
+									<Field name="last_name">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Last Name" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`last_name`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -181,13 +189,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Phone
 									</label>
-									<Field
-										name="phone"
-										component="input"
-										type="text"
-										placeholder="Phone"
-										className="form-control"
-									/>
+									<Field name="phone">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Phone" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`phone`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -200,13 +208,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Email
 									</label>
-									<Field
-										name="email"
-										component="input"
-										type="email"
-										placeholder="Email"
-										className="form-control"
-									/>
+									<Field name="email">
+										{({ input, meta }) => [
+												<input {...input} type="email" className='form-control' placeholder="Email" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`email`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -219,13 +227,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Address Street
 									</label>
-									<Field
-										name="line1"
-										component="input"
-										type="text"
-										placeholder="Address"
-										className="form-control"
-									/>
+									<Field name="line1">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Address" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`line1`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -238,13 +246,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Apt. Suite. etc...
 									</label>
-									<Field
-										name="line2"
-										component="input"
-										type="text"
-										placeholder="Apt. Suite. etc.."
-										className="form-control"
-									/>
+									<Field name="line2">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Apt. Suite. etc.." />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`line2`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -257,13 +265,13 @@ export default class Shipping extends React.Component {
 									<label>
 										City
 									</label>
-									<Field
-										name="city"
-										component="input"
-										type="text"
-										placeholder="City"
-										className="form-control"
-									/>
+									<Field name="city">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="City" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`city`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -276,13 +284,13 @@ export default class Shipping extends React.Component {
 									<label>
 										State
 									</label>
-									<Field
-										name="state"
-										component="input"
-										type="text"
-										placeholder="State / Province / Region"
-										className="form-control"
-									/>
+									<Field name="state">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="State / Province / Region" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`state`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -295,13 +303,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Zip/ Postal Code
 									</label>
-									<Field
-										name="postal_code"
-										component="input"
-										type="text"
-										className="form-control"
-										placeholder="Zip / Postal Code"
-									/>
+									<Field name="postal_code">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Zip / Postal Code" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`postal_code`}>
 											{(value, previous) => {
 													if(value !== previous){
@@ -314,13 +322,13 @@ export default class Shipping extends React.Component {
 									<label>
 										Country
 									</label>
-									<Field
-										name="country"
-										component="input"
-										type="text"
-										className="form-control"
-										placeholder="Country"
-									/>
+									<Field name="country">
+										{({ input, meta }) => [
+												<input {...input} type="text" className='form-control' placeholder="Country" />,
+												(meta.error || meta.submitError) &&
+												meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
+										]}
+									</Field>
 									<OnChange name={`country`}>
 											{(value, previous) => {
 													if(value !== previous){

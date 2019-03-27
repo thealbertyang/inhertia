@@ -26,7 +26,7 @@ export default class Navbar extends React.Component {
         <h5 className="my-0 mr-md-4 font-weight-normal navbar-brand"><a href="/">INHERTIA</a></h5>
         <nav className="my-2 my-md-0 mr-md-auto">
           <a className="p-2 text-dark" href="/collection">Collection</a>
-          <a className="p-2 text-dark" href="/guest">Guest Orders</a>
+          <a className="p-2 text-dark" href="/orders">Orders</a>
           <a className="p-2 text-dark" href="/support">Support</a>
           <a className="p-2 text-dark" href="/about">About</a>
         </nav>

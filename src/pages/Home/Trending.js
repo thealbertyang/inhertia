@@ -58,17 +58,20 @@ export default class Trending extends React.Component {
           </div>
           <div className={`row`}>
             {this.state.data && Object.keys(this.state.data).map((item, index)=>{
-              return (
-                <div className='col-12 col-md-3 px-0 px-md-5 d-flex flex-column align-items-center'>
-                  <Card
-                    url={`/product/${this.state.data[item].slug}`}
-                    images={this.state.data[item].images}
-                    title={this.state.data[item].title}
-                    price={this.state.data[item].price}
-                    ratings={this.state.data[item].ratings}
-                  />
-                </div>
-              )
+              if((index + 1) <= 4){
+                return (
+                  <div className='col-12 col-md-3 px-0 px-md-5 d-flex flex-column align-items-center'>
+                    <Card
+                      url={`/product/${this.state.data[item].slug}`}
+                      images={this.state.data[item].images}
+                      title={this.state.data[item].title}
+                      price={this.state.data[item].price}
+                      ratings={this.state.data[item].ratings}
+                      id={this.state.data[item]._id}
+                    />
+                  </div>
+                )
+              }
             })}
           </div>
         </div>

@@ -4,7 +4,6 @@ import Header from '../components/Admin/Header'
 import Edit from './AdminSettings/Edit'
 import { postData } from '../utils'
 import * as User from '../actions/user'
-import { Form, Input } from '../components/Form'
 import { connect } from 'react-redux'
 import { getLocation, redirect } from '../actions/index'
 

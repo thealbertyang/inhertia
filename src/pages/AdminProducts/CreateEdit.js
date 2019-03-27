@@ -291,10 +291,10 @@ export default class CreateEdit extends React.Component {
                            fields.map((name, index) => [
 														 <tr key={name}>
 																<td className={`py-5`} width='10%'>
-                                  <Avatar src={fields.value[index].user.avatar} size='medium' />
+                                  <Avatar src={_.has(fields.value[index].user,'avatar') && fields.value[index].user.avatar} size='medium' />
 																</td>
 																<td className={`text-justify py-5`}>
-																	<span style={{ fontWeight: '500' }}>{fields.value[index].user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment(fields.value[index].date).format("MMM Do YYYY")}</span><br/>
+																	<span style={{ fontWeight: '500' }}>{_.has(fields.value[index].user,'username') && fields.value[index].user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment(fields.value[index].date).format("MMM Do YYYY")}</span><br/>
 																	<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
 																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>
 																		<i className='material-icons' style={{ fontSize: '1rem', color: '#ffbf00' }}>star</i>

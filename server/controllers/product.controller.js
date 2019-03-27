@@ -1,6 +1,5 @@
 import Product from '../models/Product';
 import User from '../models/User';
-import ProductCategory from '../models/ProductCategory';
 import * as _ from 'lodash'
 import formidable from 'formidable'
 import moment from 'moment'

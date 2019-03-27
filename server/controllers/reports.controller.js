@@ -1,7 +1,5 @@
 import Product from '../models/Product';
-import ProductReview from '../models/ProductReview';
 import Order from '../models/Order';
-import ProductCategory from '../models/ProductCategory'
 import Customer from '../models/Customer'
 import * as _ from 'lodash'
 import formidable from 'formidable'
@@ -97,7 +95,7 @@ export function getTrendingProducts(req, res) {
           //items[i].username = model.username
          // items[i].first_name = model.first_name
           //items[i].last_name = model.last_name
-        } 
+        }
 
         model[i]['ratingAverage'] = Number(averageRating / review.length)
         model[i]['ratingAmount'] = Number(review.length)
@@ -132,11 +130,11 @@ var startMonth = moment().startOf('month')
 var endMonth = moment(startMonth).endOf('month')
 let total = 0
 
-let orders = await Order.find({ 
-    date: { 
+let orders = await Order.find({
+    date: {
       $gte: startMonth.toDate(),
       $lt: endMonth.toDate()
-    } 
+    }
   }).exec(async (err, models) => {
     if (err) {
       res.status(500).send(err);
@@ -161,11 +159,11 @@ var startMonth = moment().startOf('month')
 var endMonth = moment(startMonth).endOf('month')
 let total = 0
 
-let orders = await Order.find({ 
-    date: { 
+let orders = await Order.find({
+    date: {
       $gte: startMonth.toDate(),
       $lt: endMonth.toDate()
-    } 
+    }
   }).exec(async (err, models) => {
     if (err) {
       res.status(500).send(err);
@@ -185,11 +183,11 @@ return res.status(200).json({ message: 'Found models', response: 200, data: tota
 
 export async function getCustomersGeo(req, res) {
 /*
-let customers = await Order.find({ 
-    shipping: { 
+let customers = await Order.find({
+    shipping: {
       $gte: startMonth.toDate(),
       $lt: endMonth.toDate()
-    } 
+    }
   }).exec(async (err, models) => {
     if (err) {
       res.status(500).send(err);
@@ -222,7 +220,7 @@ export function create(req, res, next) {
       let inputs = _.mapValues(error.errors, (v,k)=>{
         let name = k
         let kind = v.kind
-        return ({ value: '', error: 'This is '+kind }) 
+        return ({ value: '', error: 'This is '+kind })
       })
 
       return res.status(400).json({ status: 'error', message: error.message, response: 400, data: inputs })
@@ -340,7 +338,7 @@ export function update(req, res, next) {
             console.log('we dont files')
             //do we have images from form?
             //if we do have images from form then we want to use that
-            let images = []  
+            let images = []
             let fieldsObj = {}
 
            _.map(fields, (v)=>{
@@ -382,7 +380,7 @@ export function update(req, res, next) {
               }
           })
        })
-  
+
 }
 
 export function remove(req, res, next){

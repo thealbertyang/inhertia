@@ -5,8 +5,6 @@ import User from '../models/User'
 import Customer from '../models/Customer'
 import Guest from '../models/Guest'
 import Settings from '../models/Settings'
-import Ticket from '../models/Ticket'
-import Board from '../models/Board'
 import * as Cart from '../libs/Cart'
 
 import puppeteer from 'puppeteer'
@@ -60,7 +58,7 @@ export function getAll(req, res) {
  */
 export function getByPagination(req, res) {
 
-  Order.paginate({}, { page: Number(req.params.page), limit: Number(req.params.limit) }, function(err, result) {
+  Order.paginate({}, { page: Number(req.params.page), limit: Number(req.params.limit), sort: '-date' }, function(err, result) {
   // result.docs
   // result.total
   // result.limit - 10
@@ -277,6 +275,7 @@ var form = new formidable.IncomingForm(),
         let amounts = await Cart.calcAmounts(items, discounts)
         let fetchedItems = await Cart.fetchItems(items)
         let charge = await chargePayment(payment, amounts)
+
         let orderQuery = {
           user_id: req.params.userId,
           stripe_customer_id: '',
@@ -321,12 +320,15 @@ var form = new formidable.IncomingForm(),
                 domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
               },
             }
+
+            console.log('charge', charge)
             const email = new Email()
-            let html = await email.render('order_created_customer/html', {
+            let html = await email.render('order_created/html', {
               name: shipping.first_name,
               items: fetchedItems,
               amount: amounts,
               shipping,
+              charge,
               order_id: model._id,
               date_ordered: moment().format('MMMM DD, YYYY'),
               url: process.env.URL,
@@ -544,11 +546,14 @@ var form = new formidable.IncomingForm(),
                 domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
               },
             }
+            console.log('charge', charge)
+
             const email = new Email()
-            let html = await email.render('order_created_customer/html', {
+            let html = await email.render('order_created/html', {
               name: shipping.first_name,
               items: fetchedItems,
               amount: amounts,
+              charge,
               shipping,
               order_id: model._id,
               date_ordered: moment().format('MMMM DD, YYYY'),

@@ -5,7 +5,7 @@ const NavItem = ({ url, title, icon}) =>
   <li className="nav-item">
       <Link to={url} className="nav-link">
         <i class={`fas fa-${icon} fa-fw mr-2`} ></i>
-        {title}
+        <span className='d-none d-md-block'>{title}</span>
       </Link>
   </li>
 
@@ -21,15 +21,15 @@ const Sidebar = ({ base }) => [
   						<small className={`text-uppercase`}>Main</small>
   				</li>
           <NavItem url={`/${base}`} title={`Dashboard`} icon={`home`} />
-          <NavItem url={`/${base}/campaigns`} title={`Campaigns`} icon={`funnel-dollar`} />
-          <NavItem url={`/${base}/orders`} title={`Orders`} icon={`file-invoice-dollar`} />
+
         </ul>
         <ul className={`nav flex-column text-left mb-3`}>
           <li class="sidebar-header">
               <small className={`text-uppercase`}>Store</small>
           </li>
           <NavItem url={`/${base}/products`} title={`Products`} icon={`shopping-bag`} />
-
+          <NavItem url={`/${base}/orders`} title={`Orders`} icon={`file-invoice-dollar`} />
+          <NavItem url={`/${base}/campaigns`} title={`Campaigns`} icon={`funnel-dollar`} />
         </ul>
         <ul className={`nav flex-column text-left mb-3`}>
           <li class="sidebar-header">
@@ -37,25 +37,7 @@ const Sidebar = ({ base }) => [
   				</li>
 
           <li className="nav-item">
-             <Link to={`/${base}/users/`} className="nav-link">
-              <i className='material-icons mr-1'>people</i>
-              Users
-            </Link>
-
-            <ul className='list-unstyled nav-list'>
-              <li className="nav-item">
-                <Link to={`/${base}/customers/`} className="nav-link">
-                  <i className='material-icons mr-1'>people</i>
-                  Admin
-                 </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={`/${base}/customers/`} className="nav-link">
-                  <i className='material-icons mr-1'>people</i>
-                  Customers
-                 </Link>
-              </li>
-            </ul>
+            <NavItem url={`/${base}/users`} title={`Users`} icon={`user`} />
           </li>
         </ul>
         <ul className={`nav flex-column text-left mb-3`}>
@@ -64,18 +46,7 @@ const Sidebar = ({ base }) => [
   				</li>
 
           <li className="nav-item">
-          <Link to={`/${base}/settings/`} className="nav-link">
-              <i className='material-icons mr-1'>settings</i>
-              Settings
-            </Link>
-            <ul className='list-unstyled nav-list'>
-              <li className="nav-item">
-                <Link to={`/${base}/integrations/`} className="nav-link">
-                  <i className='material-icons mr-1'>layers</i>
-                    Integrations
-                </Link>
-              </li>
-            </ul>
+            <NavItem url={`/${base}/settings`} title={`Settings`} icon={`cog`} />
           </li>
 
         </ul>

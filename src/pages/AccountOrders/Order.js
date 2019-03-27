@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import * as _ from 'lodash'
 import moment from 'moment'
 
-import { Form, Input } from '../../components/Form'
 import { fetchData, postData } from '../../utils'
 import * as Models from '../../actions/models'
 import { getLocation } from '../../actions/index'

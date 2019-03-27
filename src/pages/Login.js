@@ -114,7 +114,7 @@ export default class Login extends React.Component {
 												{({ input, meta }) => [
 														<input {...input} type="text" className='form-control' placeholder="Username" />,
 														(meta.error || meta.submitError) &&
-														meta.touched && <span>{meta.error || meta.submitError}</span>
+														meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
 												]}
 											</Field>
 										</div>
@@ -122,7 +122,7 @@ export default class Login extends React.Component {
 											<Field name="password">
 												{({ input, meta }) => [
 														<input {...input} type="password" className='form-control' placeholder="Password" />,
-														meta.error && meta.touched && <span>{meta.error}</span>
+														meta.error && meta.touched && <div className='mt-2'>{meta.error}</div>
 												]}
 											</Field>
 										</div>

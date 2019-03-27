@@ -12,7 +12,7 @@ const components = {
   ADMIN: 'Admin',
   LOGIN: 'Login',
   LOGOUT: 'Logout',
-  GUEST: 'Guest',
+  ORDERS: 'Orders',
   LOOKBOOK: 'Lookbook',
   SUPPORT: 'Support',
   SETUP: 'Setup',

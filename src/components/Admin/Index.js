@@ -155,11 +155,11 @@ export default class Index extends React.Component {
       			<table className="table table-striped table-hover border">
 							<thead>
 								<tr>
-									<th>
+									{/*}<th>
 										<input type='checkbox' name='checkbox'/>
-									</th>
+									</th>*/}
 									{_.map(table.fields, (item, key, arr) => {
-										return <th><a href='#'>{item.label}</a></th>
+										return <th>{item.label}</th>
 									})}
 									<th>Actions</th>
 								</tr>
@@ -168,9 +168,9 @@ export default class Index extends React.Component {
 								{this.state.data && this.state.data.docs && this.state.data.docs.map((model, index) => {
 									return (
 										<tr key={index}>
-											<td>
+											{/*<td>
 												<input type='checkbox' name='checkbox'/>
-											</td>
+											</td>*/}
 											{table && table.fields && _.map(table.fields, (item, key, arr) => {
 												return (
 													<td>

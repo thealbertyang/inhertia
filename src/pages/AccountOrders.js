@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import * as _ from 'lodash'
 
-import { Form, Input } from '../components/Form'
 
 import Header from '../components/Page/Header'
 

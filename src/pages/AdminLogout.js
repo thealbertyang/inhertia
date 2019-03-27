@@ -3,7 +3,6 @@ import Navbar from '../components/Page/Navbar'
 import { postData } from '../utils'
 import { getLocation, redirect } from '../actions/index'
 import * as User from '../actions/user'
-import { Form, Input } from '../components/Form'
 import { connect } from 'react-redux'
 
 

@@ -3,7 +3,6 @@ import Navbar from '../components/Page/Navbar'
 import Section from '../components/Page/Section'
 import Overline from '../components/Typography/Overline'
 
-import { Form, Input } from '../components/Form'
 import { getLocation, redirect } from '../actions/index'
 import { postData } from '../utils'
 import { connect } from 'react-redux'

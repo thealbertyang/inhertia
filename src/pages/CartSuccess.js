@@ -16,10 +16,9 @@ export default class Success extends React.Component {
 									<h2>Order Confirmed!</h2>
 									<h3><i className='material-icons text-success my-4' style={{ fontSize: '3.5rem' }}>check_circle</i></h3>
 									<h4>
-										Thanks you #NAME#. Your order has been confirmed.
+										Thank you. Your order has been confirmed.
 									</h4>
-									<p className='text-secondary' style={{ paddingBottom: '2rem' }}>Your order hasn't shipped yet but we will send you ane email when it does.</p>
-									<a href='/shop/orders' className='btn btn-outline-success'>View My Orders</a>
+									<p className='text-secondary' style={{ paddingBottom: '2rem' }}>Your order hasn't shipped yet but we sent you an email to track your order.</p>
 							</div>
 						</div>
 					</div>

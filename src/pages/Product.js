@@ -265,45 +265,50 @@ export default class Product extends React.Component {
 												onSubmit={(values)=>this.onSubmitReview(this.state.data._id, user._id, values)}
 												render={({ handleSubmit, values })=>(
 													<form onSubmit={handleSubmit}>
-										        <table className="table responsive table-hover">
+													{!_.isEmpty(this.props.user) && <table className="table responsive table-hover"><tr className='bg-light'>
+														<td className={`py-5`} width="10%">
+															<Avatar src={this.props.user.avatar} size={`medium`}/><br/>
+														</td>
+														<td className={`text-justify py-5`}>
+															<span style={{ fontWeight: '500' }}>{this.props.user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment().format("MMM Do YYYY")}</span><br/>
+															<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
+																<Field
+																	name="rating"
+																	component={Rating}
+																	fullWidth
+																	margin="normal"
+																	defaultValue={1}
+																/>
+															</div>
+															<p>
+																<Field
+																	name='comment'
+																	component='textarea'
+																	className='form-control'
+																	validate={this.required}
+																>
+																	{({ input, meta }) => [
+																			<textarea {...input} className={'form-control'} />,
+																			meta.error && meta.touched && <span>{meta.error}</span>
+																	]}
+																</Field>
+															</p>
+															<p>
+																<button className='btn btn-primary'>Save Comment</button>
+															</p>
+														</td>
+													</tr></table>
+												}
+										        <table className="table responsive">
 										          <tbody className={`py-4`}>
-																	{!_.isEmpty(this.props.user) && <tr className='bg-light'>
-																		<td className={`py-5`}>
-																			<Avatar src={this.props.user.avatar} size={`medium`}/><br/>
-																		</td>
-																		<td className={`text-justify py-5`}>
-																			<span style={{ fontWeight: '500' }}>{this.props.user.username}</span>&nbsp; <span className={`text-muted mb-2`}>{moment().format("MMM Do YYYY")}</span><br/>
-																			<div className='col-12 mt-2 mb-3 px-0 d-flex align-items-center'>
-																				<Field
-																					name="rating"
-																					component={Rating}
-																					fullWidth
-																					margin="normal"
-																					defaultValue={1}
-																				/>
-																			</div>
-																			<p>
-																				<Field
-																					name='comment'
-																					component='textarea'
-																					className='form-control'
-																					validate={this.required}
-																				>
-																					{({ input, meta }) => [
-																							<textarea {...input} className={'form-control'} />,
-																							meta.error && meta.touched && <span>{meta.error}</span>
-																					]}
-																				</Field>
-																			</p>
-																			<p>
-																				<button className='btn btn-primary'>Save Comment</button>
-																			</p>
-																		</td>
-																	</tr>
-																}
-																	{this.state.data.reviews && this.state.data.reviews.map((item, index)=> {
-																			return <Review avatar={item.user.avatar} username={item.user.username} comment={item.comment} rating={item.rating} date={item.date} />
-																	})}
+																	{!_.isEmpty(this.state.data.reviews) ? this.state.data.reviews.map((item, index)=> {
+																			return <Review avatar={_.has(item,'user.avatar') && item.user.avatar} username={_.has(item,'user.username') && item.user.username} comment={item.comment} rating={item.rating} date={item.date} />
+																	})
+																	:
+																		<tr>
+																			<td className='px-0'>There are no reviews to display.</td>
+																		</tr>
+																	}
 										          </tbody>
 										        </table>
 													</form>
@@ -330,6 +335,7 @@ export default class Product extends React.Component {
 															ratings={`visible`}
 															price={item.price}
 															ratings={item.ratings}
+															id={item._id}
 														/>
 													</div>
 												)

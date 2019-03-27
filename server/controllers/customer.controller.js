@@ -230,7 +230,7 @@ export function register(req, res, next) {
                   return res.status(400).json({ status: 'error', message: 'Registration failed. Some fields are missing.', response: 400, data: { ...inputs, password_confirm: { value: '', error: 'This is required' } } })
                 }
                 else {
-                    let auth = {
+                    /*let auth = {
                       auth: {
                         api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
                         domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
@@ -258,7 +258,7 @@ export function register(req, res, next) {
                       else {
                         console.log('Response: ' + info);
                       }
-                    })
+                    })*/
 
                     jwtToken = jwt.sign({ id: user._id, username: user.username, first_name: user.first_name, role: user.role, verifyEmail: user.verifyEmail }, 'real');
                     const cookie = req.cookies.jwtToken
@@ -774,7 +774,7 @@ var form = new formidable.IncomingForm(),
           console.log('files', files)
 
 
-          Customer.update({"_id": req.params.id},  { $pull: { wishlist: { product_id: fields.product_id } } }, function (error, model) {
+          Customer.update({"_id": req.params.id},  { $pull: { wishlist: { _id: fields.product_id } } }, function (error, model) {
             if (error || !model) {
               return res.status(400).json({ status: 'error', response: 401, message: 'Error with model edit. '+error});
             } else {

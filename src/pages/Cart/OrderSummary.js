@@ -66,7 +66,7 @@ export default class OrderSummary extends React.Component {
 				 }
 				 else {
 					 console.log('it didnt go thru')
-					 Messages.set('checkout', { type: 'danger', message: guestOrder.message}, dispatch)
+					 Messages.set('checkout', { type: 'danger', message: guestOrder.message }, dispatch)
 				 }
 			}
 			else {
@@ -76,7 +76,7 @@ export default class OrderSummary extends React.Component {
 				}
 				else {
 					console.log('it didnt go thru')
-					Messages.set('checkout', { type: 'danger', message: customerOrder.message}, dispatch)
+					Messages.set('checkout', { type: 'danger', message: customerOrder.message }, dispatch)
 				}
 			}
 		//}

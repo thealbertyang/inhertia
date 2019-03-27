@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as _ from 'lodash'
-import { Form, Input } from '../components/Form'
 import { fetchData, postData } from '../utils'
 import * as Models from '../actions/models'
 import Geomap from '../components/Admin/Geomap'

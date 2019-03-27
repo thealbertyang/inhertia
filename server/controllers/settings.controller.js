@@ -1,8 +1,6 @@
 import Settings from '../models/Settings';
 import Order from '../models/Order';
 import Product from '../models/Product';
-import ProductCategory from '../models/ProductCategory';
-import ProductReview from '../models/ProductReview';
 import Customer from '../models/Customer';
 import User from '../models/User';
 import Discount from '../models/Discount';
@@ -106,22 +104,6 @@ export async function databaseBackup(req, res) {
     backup = {...backup, products: model}
   })
 
-  await ProductReview.find({}, function(err, model){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-
-    backup = {...backup, productReviews: model}
-  })
-
-  await ProductCategory.find({}, function(err, model){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-
-    backup = {...backup, productCategories: model}
-  })
-
   await Discount.find({}, function(err, model){
     if (err) {
       return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
@@ -174,18 +156,6 @@ export async function databaseRestore(req, res){
     }
   })
 
-  await ProductReview.deleteMany({}, function(err){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-  })
-
-  await ProductCategory.deleteMany({}, function(err){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-  })
-
   await Discount.deleteMany({}, function(err){
     if (err) {
       return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
@@ -229,17 +199,6 @@ console.log('backup', backup)
     }
   })
 
-  await ProductReview.insertMany(backup['productReviews'], function(err){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-  })
-
-  await ProductCategory.insertMany(backup['productCategories'], function(err){
-    if (err) {
-      return res.status(500).json({ status: 'error', response: 500, message: 'Error with finding models. '+err})
-    }
-  })
 
   await Discount.insertMany(backup['discounts'], function(err){
     if (err) {

@@ -4,8 +4,8 @@ import { fetchData } from './utils'
 export default {
   HOME: '/',
   ABOUT: '/about',
-  GUEST: {
-    path: '/guest/:params*', // TRY: visit this path or dispatch ADMIN
+  ORDERS: {
+    path: '/orders/:params*', // TRY: visit this path or dispatch ADMIN
   },
   LOOKBOOK: {
     path: '/lookbook/:params*', // TRY: visit this path or dispatch ADMIN

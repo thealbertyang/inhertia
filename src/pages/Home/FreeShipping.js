@@ -11,8 +11,8 @@ const FreeShipping = () =>
         <div className='col-12 col-md-4 mb-4'>
           <div className='row d-flex flex-column pb-4' style={{ flex: '1 1', height: '100%' }}>
             <div className='col-12 d-flex flex-column justify-content-start align-items-start' style={{ flex: '1 1' }}>
-              <HeadingTwo className='mb-4 text-white'>Free shipping</HeadingTwo>
-              <p className='body-one text-white-50'>When you spend $50 or more. Love yourself. Don't feel guilty. Get what you want.</p>
+              <HeadingTwo className='mb-4 text-white'>Fast shipping</HeadingTwo>
+              <p className='body-one text-white-50'>Express shipping 5-7 days. Love yourself. Don't feel guilty. Get what you want.</p>
               <p className='body-two text-muted'>† On every purchase you spend over 50$ we will donate a percentage to a meaningful cause.</p>
             </div>
 

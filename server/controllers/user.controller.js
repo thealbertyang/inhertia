@@ -1,7 +1,6 @@
 import User from '../models/User'
 import Customer from '../models/Customer'
 import Guest from '../models/Guest'
-import Support from '../models/Support'
 
 import bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
@@ -344,7 +343,7 @@ export function forgotPassword(req, res, next) {
       //Change forgotPassword, token to
       let jwtToken = jwt.sign({ email: fields.email }, 'forgotPassword');
 
-      User.findOneAndUpdate({ email: fields.email }, { forgotPassword: jwtToken }, {upsert: true}, async function (error){
+      User.findOneAndUpdate({ email: fields.email }, { forgotPassword: jwtToken }, {upsert: true}, async function (error, user){
         if (error) {
             //Couldn't find email
             return res.status(401).json({ status: 'error', response: 401, message: 'Error with password reset. '+error});
@@ -354,7 +353,7 @@ export function forgotPassword(req, res, next) {
 
           let auth = {
             auth: {
-              api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
+              api_key: 'key-040c7266fbe55eb75787645fb72165d2',
               domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
             },
           }
@@ -362,19 +361,21 @@ export function forgotPassword(req, res, next) {
           const email = new Email()
 
           let html = await email.render('user_reset_password/html', {
-            username: 'Alberto',
             url: process.env.URL,
             token: jwtToken,
+            username: user.username,
+            email: user.email,
           })
 
           let nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
+          console.log('user', user)
           nodemailerMailgun.sendMail({
             from: '"👻" <no-reply@thealbertyang.com>', // sender address
             to: 'thealbertyang@gmail.com', // list of receivers
             subject: 'Reset password',
             html: html,
-            text: 'Reset password - '
+            text: 'Reset password - ',
           }, function (err, info) {
             if (err) {
               console.log('Error: ' + err);
@@ -422,50 +423,17 @@ export function resetPassword(req, res, next) {
       console.log('fields', fields)
       console.log('files', files)
 
-      if (fields.token && fields.password && (fields.password == fields.password_confirm)) {
+      if (fields.token && fields.password) {
         let jwtToken = jwt.verify(fields.token, 'forgotPassword');
         bcrypt.hash(fields.password, 10, function (err, hash){
 
           fields.password = hash
-          User.findOneAndUpdate({ forgotPassword : fields.token }, { forgotPassword: 'false', password: fields.password }, {upsert:true}, function (error){
+          User.findOneAndUpdate({ forgotPassword : fields.token }, { forgotPassword: 'false', password: fields.password }, {upsert:true}, async function (error, user){
             if (error) {
                 //Couldn't find email
                 return res.status(401).json({ status: 'error', response: 401, message: 'Error with password reset. '+error});
             }
             else {
-            //Found email... add token send password reset
-
-             /* let auth = {
-                auth: {
-                  api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
-                  domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
-                },
-              }
-
-              const email = new Email()
-
-              let html = await email.render('user_reset_password/html', {
-                username: 'Alberto',
-                url: process.env.URL,
-                token: jwtToken,
-              })
-
-              let nodemailerMailgun = nodemailer.createTransport(mg(auth));
-
-              nodemailerMailgun.sendMail({
-                from: '"👻" <no-reply@thealbertyang.com>', // sender address
-                to: 'thealbertyang@gmail.com', // list of receivers
-                subject: 'Reset password',
-                html: html,
-                text: 'Reset password - '
-              }, function (err, info) {
-                if (err) {
-                  console.log('Error: ' + err);
-                }
-                else {
-                  console.log('Response: ' + info);
-                }
-              })*/
 
               return res.status(200).json({ status: 'success', response: 200, message: `Successfully reset your password.`})
 
@@ -576,7 +544,7 @@ export function register(req, res, next) {
               } else {
                 //req.session.userId = user._id;
                 //console.log(user, req.session)
-
+                /*
                 let auth = {
                   auth: {
                     api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
@@ -604,7 +572,7 @@ export function register(req, res, next) {
                   else {
                     console.log('Response: ' + info);
                   }
-                })
+                })*/
 
                 return res.json({ status: 'success', response: 200, data: { jwtToken: jwtToken } });
 
@@ -827,35 +795,6 @@ export async function update(req, res, next){
               }
           })
 
-          console.log('tester', _.includes(fields.roles, 'customer'))
-          if(_.includes(fields.roles, 'customer')){
-            let customerFields = {
-              shipping: fields.customer && !_.indexOf(fields.customer.shipping, null) > -1 ? fields.customer.shipping : [],
-              shipping_primary_id: '',
-              wishlist: [],
-              user_id: user._id,
-              stripe_customer_id: '',
-              discounts_used: [],
-              coins: fields.customer && fields.customer.coins ? fields.customer.coins : 0,
-            }
-
-            let customer = await Customer.findOneAndUpdate({ user_id: user._id }, customerFields, { upsert: true, new: true }).lean().exec((error, customer)=>{
-              if(error || !customer){
-                let inputs = _.mapValues(fields, v=>({ value: v }))
-                _.mapValues(error.errors, (v, k)=> inputs = {...inputs, [v.path]: { value: v.value ? v.value : '' , error: v.message }} )
-                return res.status(400).json({ status: 'error', message: 'Customer create failed. Some fields are missing.', response: 400, data: { ...inputs, password: { value: '', error: 'This is required' }, password_confirm: { value: '', error: 'This is required' } } })
-              }
-
-              return customer
-
-
-            })
-
-            user.customer = customer
-
-          }
-
-          console.log('got in here', user)
 
           return res.json({ status: 'success', response: 200, data: user })
     })

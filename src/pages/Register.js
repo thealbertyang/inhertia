@@ -79,12 +79,24 @@ export default class Register extends React.Component {
 				      onSubmit={this.onSubmit}
 				      validate={values => {
 				        const errors = {};
-				        if (!values.username) {
-				          errors.username = "Required";
-				        }
-				        if (!values.password) {
-				          errors.password = "Required";
-				        }
+								 if (!values.username) {
+								 errors.username = "Required";
+								 }
+								 if (!values.email) {
+									 errors.email = "Required";
+								 }
+								 if (!values.first_name) {
+									 errors.first_name = "Required";
+								 }
+								 if (!values.last_name) {
+									 errors.last_name = "Required";
+								 }
+								 if (!values.password_confirm) {
+									 errors.password_confirm = "Required";
+								 }
+								 if (!values.password) {
+									 errors.password = "Required";
+								 }
 				        return errors;
 				      }}
 				      render={({
@@ -103,7 +115,7 @@ export default class Register extends React.Component {
 												{({ input, meta }) => [
 														<input {...input} type="text" className='form-control' placeholder="Username" />,
 														(meta.error || meta.submitError) &&
-														meta.touched && <span>{meta.error || meta.submitError}</span>
+														meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
 												]}
 											</Field>
 										</div>
@@ -112,7 +124,7 @@ export default class Register extends React.Component {
 												{({ input, meta }) => [
 														<input {...input} type="email" className='form-control' placeholder="Email" />,
 														(meta.error || meta.submitError) &&
-														meta.touched && <span>{meta.error || meta.submitError}</span>
+														meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
 												]}
 											</Field>
 										</div>
@@ -121,7 +133,7 @@ export default class Register extends React.Component {
 												{({ input, meta }) => [
 														<input {...input} type="text" className='form-control' placeholder="First Name" />,
 														(meta.error || meta.submitError) &&
-														meta.touched && <span>{meta.error || meta.submitError}</span>
+														meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
 												]}
 											</Field>
 										</div>
@@ -130,7 +142,7 @@ export default class Register extends React.Component {
 												{({ input, meta }) => [
 														<input {...input} type="text" className='form-control' placeholder="Last Name" />,
 														(meta.error || meta.submitError) &&
-														meta.touched && <span>{meta.error || meta.submitError}</span>
+														meta.touched && <div className='mt-2'>{meta.error || meta.submitError}</div>
 												]}
 											</Field>
 										</div>
@@ -138,7 +150,7 @@ export default class Register extends React.Component {
 											<Field name="password">
 												{({ input, meta }) => [
 														<input {...input} type="password" className='form-control' placeholder="Password" />,
-														meta.error && meta.touched && <span>{meta.error}</span>
+														meta.error && meta.touched && <div className='mt-2'>{meta.error}</div>
 												]}
 											</Field>
 										</div>
@@ -146,7 +158,7 @@ export default class Register extends React.Component {
 											<Field name="password_confirm">
 												{({ input, meta }) => [
 														<input {...input} type="password" className='form-control' placeholder="Re-type Password" />,
-														meta.error && meta.touched && <span>{meta.error}</span>
+														meta.error && meta.touched && <div className='mt-2'>{meta.error}</div>
 												]}
 											</Field>
 										</div>

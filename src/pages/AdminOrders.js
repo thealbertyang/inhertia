@@ -8,7 +8,6 @@ import Index from '../components/Admin/Index'
 import Header from '../components/Admin/Header'
 
 import CreateEdit from './AdminOrders/CreateEdit'
-import { Form, Input } from '../components/Form'
 
 
 @connect((store)=>{
@@ -49,10 +48,6 @@ export default class Orders extends React.Component {
 									{
 										label: 'Status',
 										key: 'status',
-									},
-									{
-										label: 'Slug',
-										key: 'slug',
 									},
 									{
 										label: 'Date',
