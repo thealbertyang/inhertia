@@ -2,3 +2,6 @@ node_modules
 *.log
 buildClient
 buildServer
+webpack
+assets
+package.json

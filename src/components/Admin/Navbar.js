@@ -8,9 +8,6 @@ const Navbar = ({ user }) => <nav className="navbar d-flex flex-column flex-md-r
     <a className="p-2 text-dark" href="/orders">Orders</a>
     <a className="p-2 text-dark" href="/support">Support</a>
     <a className="p-2 text-dark" href="/about">About</a>
-    <a className="p-2 text-dark" href="/typography">Typography</a>
-    <a className="p-2 text-dark" href="/components">Components</a>
-    <a className="p-2 text-dark" href="/">Website</a>
   </nav>
   <ul className="navbar-nav d-flex flex-row justify-content-md-end justify-content-md-center align-items-center px-0">
      <li className="nav-item mr-2">

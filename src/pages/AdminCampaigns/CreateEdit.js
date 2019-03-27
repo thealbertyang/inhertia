@@ -10,11 +10,12 @@ import { Form, Field } from 'react-final-form'
 import { fetchData, postData } from '../../utils'
 import { getLocation, redirect } from '../../actions/index'
 import Models from '../../actions/models'
+import * as Messages from '../../actions/messages'
 
 @connect((store)=>{
 	return {
 		forms: store.forms,
-		models: store.models,
+		messages: store.messages,
 		location: store.location,
 	}
 })
@@ -56,14 +57,14 @@ export default class CreateEdit extends React.Component {
 		}
 		let create = await this.createModel(data)
 		if(create.response === 200){
-				this.props.dispatch(redirect('ADMIN', page))
-		}
+        this.props.dispatch(redirect('ADMIN', page))
+    }
 		else if(create.response === 409){
-				return formMessage('danger', 'Duplicate User.')
-		}
-		else {
-				return formMessage('danger', 'Saving Failed.')
-		}
+      Messages.set('Campaigns', { message: 'Duplicate Product.', type: 'danger' }, this.props.dispatch)
+    }
+    else {
+      Messages.set('Campaigns', { message: 'Creating Failed.', type: 'danger' }, this.props.dispatch)
+    }
 	}
 
   onSubmitEdit = async (values) => {
@@ -75,11 +76,11 @@ export default class CreateEdit extends React.Component {
       colors: JSON.stringify(values.colors)
     }
     let update = await this.updateModel(id, data)
-    if(update.response === 200){
-        return formMessage('success', 'Successfully Updated.')
+		if(update.response === 200){
+			Messages.set('Campaigns', { message: 'Successfully updated.', type: 'success' }, this.props.dispatch)
     }
     else {
-        return formMessage('danger', 'Updating Failed.')
+      Messages.set('Campaigns', { message: 'Updating failed.', type: 'success' }, this.props.dispatch)
     }
   }
 
@@ -94,7 +95,7 @@ export default class CreateEdit extends React.Component {
 
 	render() {
 		let { props } = this
-		let { location, forms, models, dispatch } = props
+		let { location, messages, dispatch } = props
 		let { base, page, method, params } = getLocation(location)
 
 		return [
@@ -121,110 +122,63 @@ export default class CreateEdit extends React.Component {
 					values,
 					}) => (
 					<form onSubmit={handleSubmit} className={`row px-5`} id={`createEditForm`}>
-						<pre style={{ maxWidth: '400px' }}>{JSON.stringify(values, 0, 2)}</pre>
-						<div className='col-12'>
-							{submitError && submitError}
+						<div className={`col-12`}>
+							{messages.Campaigns && <div className={`alert alert-${messages.Campaigns.type}`}>{messages.Campaigns.message}</div>}
 						</div>
 						<div className="col-8">
 							<Card
 								classes={`mb-4`}
-								header={
-									<div className='col-6 mb-0'>
-										Edit
-									</div>
-								}
 								body={[
-									<div className="form-group col-6">
-										<Field name="title">
-											{({ input, meta }) => [
-													<label>Title</label>,
-													<input type="text" {...input} placeholder="Enter title" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
-									<div className="form-group col-6">
-										<Field name="expire_date">
-											{({ input, meta }) => [
-													<label>Expire Date</label>,
-													<input type="date" {...input} placeholder="Expire Date" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
-									<div className="form-group col-4">
-										<Field name="discount_code">
-											{({ input, meta }) => [
-													<label>Discount Code</label>,
-													<input type="text" {...input} placeholder="Discount Code" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
-									<div className="form-group col-4">
-										<Field name="discount_type" component="select" className={`form-control`}>
-											<option value='cart'>Cart</option>
-											<option value='shipping'>Shipping</option>
-										</Field>
-									</div>,
-									<div className="form-group col-4">
-										<Field name="discount_value">
-											{({ input, meta }) => [
-													<label>Discount Value</label>,
-													<input type="text" {...input} placeholder="Discount Value" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
-									<div className="form-group col-6">
-										<Field name="views">
-											{({ input, meta }) => [
-													<label>Views</label>,
-													<input type="number" {...input} placeholder="Views" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
-									<div className="form-group col-6">
-										<Field name="purchases">
-											{({ input, meta }) => [
-													<label>Purchases</label>,
-													<input type="number" {...input} placeholder="Purchases" className={`form-control`} />,
-													meta.touched && meta.error && <span>{meta.error}</span>,
-											]}
-										</Field>
-									</div>,
+									<h6 className='card-title'>Discount</h6>,
+									<div className='row'>
+										<div className="form-group col-6">
+											<Field name="title">
+												{({ input, meta }) => [
+														<label>Title</label>,
+														<input type="text" {...input} placeholder="Enter title" className={`form-control`} />,
+														meta.touched && meta.error && <span>{meta.error}</span>,
+												]}
+											</Field>
+										</div>
+										<div className="form-group col-6">
+											<Field name="expire_date">
+												{({ input, meta }) => [
+														<label>Expire Date</label>,
+														<input type="date" {...input} placeholder="Expire Date" className={`form-control`} />,
+														meta.touched && meta.error && <span>{meta.error}</span>,
+												]}
+											</Field>
+										</div>
+										<div className="form-group col-4">
+											<Field name="discount_code">
+												{({ input, meta }) => [
+														<label>Discount Code</label>,
+														<input type="text" {...input} placeholder="Discount Code" className={`form-control`} />,
+														meta.touched && meta.error && <span>{meta.error}</span>,
+												]}
+											</Field>
+										</div>
+										<div className="form-group col-4">
+											<label>Discount Type</label>
+											<Field name="discount_type" component="select" className={`form-control`}>
+												<option value='cart'>Cart</option>
+												<option value='shipping'>Shipping</option>
+											</Field>
+										</div>
+										<div className="form-group col-4">
+											<Field name="discount_value">
+												{({ input, meta }) => [
+														<label>Discount Value</label>,
+														<input type="text" {...input} placeholder="Discount Value" className={`form-control`} />,
+														meta.touched && meta.error && <span>{meta.error}</span>,
+												]}
+											</Field>
+										</div>
+									</div>
 								]}
 							/>
 						</div>
 						<div className='col-4'>
-							<Card
-								header={
-									<div className='col-6 mb-0'>
-										{_.capitalize(method)}
-									</div>
-								}
-								body={[
-									<div className={`form-group col-12`}>
-										<Field name="status" component="select" className={`form-control`}>
-											<option value='draft'>Draft</option>
-											<option value='published'>Published</option>
-										</Field>
-									</div>,
-									<div className={`form-group col-12`}>
-										<Field name="status" component="select" className={`form-control`}>
-											<option value='all'>All</option>
-											<option value='customer'>Customer</option>
-										</Field>
-									</div>,
-								]}
-								footer={
-									<div className="form-group d-flex justify-content-end col-12 mt-3">
-								  		<button type="submit" className="btn col-6 btn-success">Submit</button>
-								  		<a href={`/${base}/${page}`} className="ml-3 col-6 btn text-secondary bg-light btn-medium">Cancel</a>
-								  	</div>
-								}
-							/>
 						</div>
 					</form>
 				)}

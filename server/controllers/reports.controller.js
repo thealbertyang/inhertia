@@ -141,7 +141,8 @@ let orders = await Order.find({
     }
     else {
       _.map(models,(item, key, arr)=>{
-        total = total + item.amount.total
+        total = (total + item.amounts.total).toFixed(2)
+
       })
     }
   })

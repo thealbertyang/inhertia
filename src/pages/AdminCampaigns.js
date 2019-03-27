@@ -47,8 +47,16 @@ export default class Campaigns extends React.Component {
 											key: 'title',
 										},
 										{
-											label: 'Slug',
-											key: 'slug',
+											label: 'Discount Code',
+											key: 'discount_code',
+										},
+										{
+											label: 'Type',
+											key: 'discount_type',
+										},
+										{
+											label: 'Value Deducted',
+											key: 'discount_value',
 										},
 										{
 											label: 'Date',

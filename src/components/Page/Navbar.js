@@ -49,7 +49,7 @@ export default class Navbar extends React.Component {
            {(user && !_.isEmpty(user)) && [
             <li className="nav-item dropdown">
              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <Avatar size={`small`} className={`mr-2`}/>
+              <Avatar size={`small`} src={user.avatar} className={`mr-2`}/>
                {user.first_name}
              </a>
              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

@@ -5,16 +5,9 @@ var mongoosePaginate = require('mongoose-paginate');
 var DiscountSchema = new mongoose.Schema({
   title: String,
   discount_code: String,
-  discount_roles: String,
   discount_type: String,
   discount_value: String,
-  views: Number,
-  purchases: Number,
-  published: String,
-  expire_date: {
-    type: Date,
-    default: Date.now
-  },
+  uses: Number,
 });
 
 DiscountSchema.index({'$**': 'text'})

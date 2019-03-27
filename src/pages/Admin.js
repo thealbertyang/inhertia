@@ -87,7 +87,7 @@ export default class Admin extends React.Component {
 						<div className={`row flex-fill`}>
 							<Sidebar base={ base } />
 							<div className={`col-11 col-md-10 bg-light`}>
-								<Navbar/>
+								<Navbar user={user} />
 								{typeof page === 'undefined' && <Component page="AdminDashboard"/>}
 								{page === 'campaigns' && <Component page="AdminCampaigns"/>}
 								{page === 'customers' && <Component page="AdminCustomers"/>}

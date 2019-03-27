@@ -101,7 +101,7 @@ export default class Switcher extends React.Component {
     handleKeyDown = (e) => {
       console.log(e)
 
-      if(e.key === 'a' && e.ctrlKey === true){
+      if(e.key === 'A' && e.ctrlKey === true && e.shiftKey === true){
         this.props.dispatch(redirect('ADMIN'))
       }
     }

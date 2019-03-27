@@ -78,8 +78,7 @@ export default class Index extends React.Component {
 			 this.setState({ loading: false, data })
 	}
 
-	loadSearchtwo = async (values) => {
-		alert(JSON.stringify(values,0,2))
+	loadSearch = async (values) => {
 		let { props } = this
 		let { api, location, dispatch } = props
 		let { base, page, method, params } = getLocation(location)
@@ -130,7 +129,7 @@ export default class Index extends React.Component {
 				</div>
 				<div className='col-12'>
 					<Form
-						onSubmit={this.loadSearchtwo}
+						onSubmit={this.loadSearch}
 						render={({ handleSubmit, pristine, invalid, values }) => {
 							return (
 								<form onSubmit={handleSubmit} id={`indexSearchForm`}>

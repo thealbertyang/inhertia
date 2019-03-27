@@ -125,7 +125,6 @@ export default class Index extends React.Component {
 									            		<div className="col-12 mb-4">
 									                		<h3 className="">{_.has(models, 'monthlyOrders') ? models['monthlyOrders'] : 0}</h3>
 									                		<span className="small hint-text float-left">22% higher</span>
-									                		<span className="float-right small text-danger">$23,000</span>
 									                	</div>
 									              	</div>
 									            </div>
@@ -167,7 +166,6 @@ export default class Index extends React.Component {
 									                	</div>
 									           			<div className="col-12 mb-4">
 									                		<span className="small hint-text float-left">71% of total goal</span>
-									                		<span className="float-right small text-primary">$23,000</span>
 									                	</div>
 									                </div>
 									            </div>
