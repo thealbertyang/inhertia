@@ -22,7 +22,7 @@ import formidable from 'formidable'
 const util = require('util');
 var ObjectID = require('mongodb').ObjectID;
 
-let stripe = Stripe('sk_live_iT51vSCZzoB1yq1SbtHIgDTM');
+let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
 
 let mapInputsToModel = (req) => ({
   stripe_id: req.body.stripe_id.value,
@@ -277,6 +277,9 @@ var form = new formidable.IncomingForm(),
           return res.status(400).json({ status: 'error', message: 'You need a items to be able to purchase.', response: 400 })
         }
 
+        let user = await User.findOne({ _id: req.params.userId }).lean().exec();
+
+        console.log('user', user)
         let amounts = await Cart.calcAmounts(items, discounts)
         let fetchedItems = await Cart.fetchItems(items)
         let charge = await chargePayment(payment, amounts)
@@ -326,7 +329,7 @@ var form = new formidable.IncomingForm(),
             let auth = {
               auth: {
                 api_key: 'key-040c7266fbe55eb75787645fb72165d2',
-                domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+                domain: 'inhertia.com'
               },
             }
 
@@ -345,15 +348,15 @@ var form = new formidable.IncomingForm(),
             let nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
             nodemailerMailgun.sendMail({
-              from: '"👻" <foo@example.com>', // sender address
-              to: 'thealbertyang@gmail.com', // list of receivers
+              from: '"Inhertia Clothing Brand" <no-reply@inhertia.com>', // sender address
+              to: user.email, // list of receivers
               subject: 'Your order is successful and is processing ✔',
               html: html,
               text: 'Mailgun rocks, pow pow!'
             }, function (err, info) {
               if (err) {
                 console.log('Error: ' + err);
-                return res.status(400).json({ status: 'error', response: 400, message: 'Error with finding single model. '+error});
+                return res.status(400).json({ status: 'error', response: 400, message: 'Could not send email. Please check your email and try again.' });
 
               }
               else {
@@ -552,7 +555,7 @@ var form = new formidable.IncomingForm(),
             let auth = {
               auth: {
                 api_key: 'key-040c7266fbe55eb75787645fb72165d2',
-                domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+                domain: 'inhertia.com'
               },
             }
             console.log('charge', charge)
@@ -571,11 +574,11 @@ var form = new formidable.IncomingForm(),
             let nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
             nodemailerMailgun.sendMail({
-              from: '"👻" <foo@example.com>', // sender address
-              to: 'thealbertyang@gmail.com', // list of receivers
+              from: '"Inhertia Clothing Brand" <no-reply@inhertia.com>', // sender address
+              to: shipping.email, // list of receivers
               subject: 'Your order is successful and is processing ✔',
               html: html,
-              text: 'Mailgun rocks, pow pow!'
+              text: ''
             }, function (err, info) {
               if (err) {
                 console.log('Error: ' + err);

@@ -354,7 +354,7 @@ export function forgotPassword(req, res, next) {
           let auth = {
             auth: {
               api_key: 'key-040c7266fbe55eb75787645fb72165d2',
-              domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+              domain: 'inhertia.com'
             },
           }
 
@@ -371,11 +371,11 @@ export function forgotPassword(req, res, next) {
 
           console.log('user', user)
           nodemailerMailgun.sendMail({
-            from: '"👻" <no-reply@thealbertyang.com>', // sender address
-            to: 'thealbertyang@gmail.com', // list of receivers
+            from: '"Inhertia Clothing Brand" <no-reply@inhertia.com>', // sender address
+            to: user.email, // list of receivers
             subject: 'Reset password',
             html: html,
-            text: 'Reset password - ',
+            text: 'Reset password',
           }, function (err, info) {
             if (err) {
               console.log('Error: ' + err);

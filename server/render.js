@@ -25,9 +25,6 @@ export default ({ clientStats }) => async (req, res, next) => {
         <head>
           <meta charset="utf-8">
           <title>Inhertia Clothing Brand</title>
-          <link rel="stylesheet prefetch" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-          <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
           ${styles}
         </head>
         <body>

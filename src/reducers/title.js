@@ -1,21 +1,12 @@
-export default (state = 'RFR Demo', action = {}) => {
+export default (state = 'Inherta Clothing Brand', action = {}) => {
   switch (action.type) {
-    case 'HOME':
-      return 'RFR Demo'
-    case 'LIST':
-      return `RFR: ${capitalize(action.payload.category)}`
-    case 'VIDEO':
-      return `RFR: ${capitalize(action.payload.slug)}`
     case 'LOGIN':
-      return 'RFR Login'
+      return 'Inherta Clothing Brand - Login'
     case 'ADMIN':
-      return 'RFR Admin'
+      return 'Inherta Clothing Brand - Admin'
     default:
       return state
   }
 }
-
-const capitalize = str =>
-  str.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 
 // RFR automatically changes the document.title for you :)
