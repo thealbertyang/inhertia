@@ -22,7 +22,7 @@ import formidable from 'formidable'
 const util = require('util');
 var ObjectID = require('mongodb').ObjectID;
 
-let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
+let stripe = Stripe('sk_live_iT51vSCZzoB1yq1SbtHIgDTM');
 
 let mapInputsToModel = (req) => ({
   stripe_id: req.body.stripe_id.value,
@@ -272,9 +272,18 @@ var form = new formidable.IncomingForm(),
 
         let cart = JSON.parse(fields.cart)
         let { items, discounts, shipping, payment } = cart
+
+        if(items.length === 0) {
+          return res.status(400).json({ status: 'error', message: 'You need a items to be able to purchase.', response: 400 })
+        }
+
         let amounts = await Cart.calcAmounts(items, discounts)
         let fetchedItems = await Cart.fetchItems(items)
         let charge = await chargePayment(payment, amounts)
+
+        if(typeof charge === 'undefined') {
+          return res.status(400).json({ status: 'error', message: 'Payment Details were invalid.', response: 400 })
+        }
 
         let orderQuery = {
           user_id: req.params.userId,

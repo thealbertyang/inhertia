@@ -57,11 +57,13 @@ class CheckoutForm extends React.Component {
   render() {
     return (
       <form onSubmit={e=>e.preventDefault() } className={`row`}>
-
         <CardSection onChange={(e)=>this.handleSubmit(e)} />
-          <div className="col-12 text-right">
-            {this.props.cart && this.props.cart.token ? 'Loaded' : 'Not Loaded'}
-          </div>
+        <div className="col-6">
+          <img src='/img/powered_by_stripe.png'/>
+        </div>
+        <div className="col-6 text-right">
+          {this.props.cart && this.props.cart.token ? [<span className='text-success mr-2'>Loaded</span>,<i className='text-success fas fa-check-circle'></i>] : [<span className='text-muted mr-2'>Not Loaded</span>,<i className='text-muted fas fa-spinner'></i>]}
+        </div>
       </form>
     );
   }

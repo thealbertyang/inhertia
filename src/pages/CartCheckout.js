@@ -8,6 +8,7 @@ import Payment from './CartCheckout/Payment'
 
 import Footer from '../components/Page/Footer'
 import Navbar from '../components/Page/Navbar'
+import Avatar from '../components/Page/Avatar'
 
 import * as Cart from '../actions/cart'
 import * as Messages from '../actions/messages'
@@ -52,7 +53,15 @@ export default class Checkout extends React.Component {
 											You are checking out as guest. <a href='/register'>Create</a> an account or <a href='/login'>login</a> to easily track your orders.
 										</div>
 									</div>
-							] : <div>Logged in as</div> }
+							] : [
+									<h3 className='font-weight-light'>User</h3>,
+									<div className='card mb-5'>
+										<div className='card-body'>
+											<div><Avatar size={`medium`} src={user.avatar} className='mr-2'/> Logged in as {user.username}</div>
+										</div>
+									</div>
+							]
+						 }
 						<Shipping/>
 						<Payment/>
 					</div>

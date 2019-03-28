@@ -70,7 +70,7 @@ export default class Edit extends React.Component {
 			console.log('it was reset')
 			//Form.set({ name: 'setting', inputs: {}, status: 'success', message: 'Reset.', dispatch })
 
-			dispatch(redirect('ADMIN', 'settings'))
+			window.location.href = '/admin/settings'
 		}
 	}
 
@@ -197,8 +197,8 @@ export default class Edit extends React.Component {
   											<label>Restore Files</label>
   											<Field name="restore_files" component="select" className={`form-control`} defaultValue={this.state.data.restore_files && this.state.data.restore_files[0]}>
   												{
-  													this.state.data && this.state.data.restore_files && this.state.data.restore_files.map((each, index) => (
-  													<option value={each} key={index}>{each}</option>
+  													this.state.data && this.state.data.restore_files && this.state.data.restore_files.map((item, index) => (
+  													<option value={item} key={index}>{item}</option>
   																					))}
   											</Field>
   									</div>

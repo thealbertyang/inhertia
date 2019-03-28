@@ -55,23 +55,20 @@ export default class Index extends React.Component {
 				return (
 					<div className="container-fluid d-flex flex-column">
 							<div className="row">
-								<div className='col-4'>
-
+								<div className='col-12'>
+									<h2>Dashboard</h2>
+								</div>
+								<div className='col-6'>
 									<div className="card widget-loader-bar mb-4">
 								          <div className="container p-0 full-height">
 								            <div className="row">
 								              <div className="col">
 								                <div className="card-header border-bottom-0 bg-transparent row d-flex flex-row">
 								                  <div className="card-title mb-0 col-8">
-								                    <span className="fs-11 all-caps">Monthly Profit <i className="fa fa-chevron-right" />
+								                    <span className="fs-11 all-caps">Monthly Profit
 								                    </span>
 								                  </div>
 								                  <div className="card-controls col-4 float-right">
-									                <ul className='no-style mb-0 d-flex justify-content-end align-items-center'>
-									                    <li>
-									                      	{/*<a href="#" className="text-black" data-toggle="refresh"><i className="material-icons">refresh</i></a>*/}
-									                    </li>
-								                    </ul>
 								                  </div>
 								                </div>
 								              </div>
@@ -83,146 +80,12 @@ export default class Index extends React.Component {
 									                		<h3><span className='font-lato'>$</span>{_.has(models, 'monthlyProfit') ? models['monthlyProfit'] : 0}</h3>
 									                	</div>
 									           			<div className="col-12 mb-4">
-									                		<span className="small hint-text float-left">71% > last week </span>
-									                		<span className="float-right small text-primary">$23,000</span>
 									                	</div>
 									                </div>
 									            </div>
 								            </div>
-								            <div className="row">
-								              <div className="col col-bottom">
-								                <div className="progress progress-small mb-0">
-								                  <div className="progress-bar progress-bar-primary" style={{width: '71%'}} />
-								                </div>
-								              </div>
-								            </div>
 								          </div>
 								        </div>
-
-
-								        <div className="card widget-loader-bar mb-4">
-								          <div className="container p-0 full-height">
-								            <div className="row">
-								            	<div className='col-12'>
-									                <div className="card-header border-bottom-0 bg-transparent row d-flex flex-row">
-										                <div className="card-title mb-0 col-8">
-										                    <span className="fs-11 all-caps">Monthly Orders <i className="fa fa-chevron-right" />
-										                    </span>
-										                </div>
-										                <div className="card-controls col-4 float-right">
-										                    <ul className='no-style mb-0 d-flex justify-content-end align-items-center'>
-										                      <li>
-										                      	{/*<a href="#" className="text-black" data-toggle="refresh"><i className="material-icons">refresh</i></a>*/}
-										                      </li>
-										                    </ul>
-										                </div>
-										            </div>
-										        </div>
-								            </div>
-								            <div className="row">
-									            <div className="col mx-2 mx-4">
-									              	<div className="row">
-									            		<div className="col-12 mb-4">
-									                		<h3 className="">{_.has(models, 'monthlyOrders') ? models['monthlyOrders'] : 0}</h3>
-									                		<span className="small hint-text float-left">22% higher</span>
-									                	</div>
-									              	</div>
-									            </div>
-								            </div>
-								            <div className="row">
-								              <div className="col-12">
-								                <div className="progress progress-small mb-0">
-								                  <div className="progress-bar progress-bar-danger" style={{width: '15%'}} />
-								                </div>
-								              </div>
-								            </div>
-								          </div>
-								        </div>
-
-									  	<div className="card widget-loader-bar mb-4">
-								          <div className="container p-0 full-height">
-								            <div className="row">
-								              <div className="col">
-								                <div className="card-header border-bottom-0 bg-transparent row d-flex flex-row">
-								                  <div className="card-title mt-1 mb-0 col-8">
-								                    <span className="fs-11 all-caps">Monthly Customers<i className="fa fa-chevron-right" />
-								                    </span>
-								                  </div>
-								                  <div className="card-controls col-4 float-right">
-									                <ul className='no-style mb-0 d-flex justify-content-end align-items-center'>
-									                    <li>
-									                      	{/*<a href="#" className="text-black" data-toggle="refresh"><i className="material-icons">refresh</i></a>*/}
-									                    </li>
-								                    </ul>
-								                  </div>
-								                </div>
-								              </div>
-								            </div>
-								            <div className="row">
-									            <div className="col px-4 mx-2">
-								            		<div className="row">
-								            			<div className="col-12">
-									                		<h3><span className='font-lato'></span>12</h3>
-									                	</div>
-									           			<div className="col-12 mb-4">
-									                		<span className="small hint-text float-left">71% of total goal</span>
-									                	</div>
-									                </div>
-									            </div>
-								            </div>
-								            <div className="row">
-								              <div className="col col-bottom">
-								                <div className="progress progress-small mb-0">
-								                  <div className="progress-bar progress-bar-primary" style={{width: '71%'}} />
-								                </div>
-								              </div>
-								            </div>
-								          </div>
-								        </div>
-
-
-
-
-								        <div className="card widget-loader-bar mb-4">
-								          <div className="container p-0 full-height">
-								            <div className="row">
-								            	<div className='col-12'>
-									                <div className="card-header border-bottom-0 bg-transparent row d-flex flex-row">
-										                <div className="card-title mb-0 col-6">
-										                    <span className="fs-11 all-caps">Page Visits <i className="fa fa-chevron-right" />
-										                    </span>
-										                </div>
-										                <div className="card-controls col-6 float-right">
-										                    <ul className='no-style mb-0 d-flex justify-content-end align-items-center'>
-										                      <li>
-										                      	{/*<a href="#" className="text-black" data-toggle="refresh"><i className="material-icons">refresh</i></a>*/}
-										                      </li>
-										                    </ul>
-										                </div>
-										            </div>
-										        </div>
-								            </div>
-								            <div className="row">
-									            <div className="col mx-2 mx-4">
-									              	<div className="row">
-									            		<div className="col-12 mb-4">
-									                		<h3 className="">423</h3>
-									                		<span className="small hint-text float-left">22% higher</span>
-									                		<span className="float-right small text-danger">$23,000</span>
-									                	</div>
-									              	</div>
-									            </div>
-								            </div>
-								            <div className="row">
-								              <div className="col-12">
-								                <div className="progress progress-small mb-0">
-								                  <div className="progress-bar progress-bar-danger" style={{width: '15%'}} />
-								                </div>
-								              </div>
-								            </div>
-								          </div>
-								        </div>
-
 
 
 
@@ -267,7 +130,6 @@ export default class Index extends React.Component {
 								        </div>
 								</div>*/}
 							    <div className="col-6">
-							    	<Geomap/>
 							    {/*
 
 									get user primary shipping address if any then
@@ -275,6 +137,32 @@ export default class Index extends React.Component {
 									add to map
 
 							    */}
+
+									<div className="card widget-loader-bar mb-4">
+										<div className="container p-0 full-height">
+											<div className="row">
+												<div className='col-12'>
+														<div className="card-header border-bottom-0 bg-transparent row d-flex flex-row">
+															<div className="card-title mb-0 col-8">
+																	<span className="fs-11 all-caps">Monthly Orders
+																	</span>
+															</div>
+															<div className="card-controls col-4 float-right">
+															</div>
+													</div>
+											</div>
+											</div>
+											<div className="row">
+												<div className="col mx-2 mx-4">
+														<div className="row">
+														<div className="col-12 mb-4">
+																<h3 className="">{_.has(models, 'monthlyOrders') ? models['monthlyOrders'] : 0}</h3>
+															</div>
+														</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 
 							</div>

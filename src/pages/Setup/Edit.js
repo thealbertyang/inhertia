@@ -29,13 +29,6 @@ export default class Edit extends React.Component {
 		this.inputRestoreFile = React.createRef()
 	}
 
-	convertModelToInputs = (modelData) => {
-		let inputs = _.mapValues(modelData, (v,k)=>{
-	        return ({ value: v })
-  		})
-		return ({...inputs})
-	}
-
 	componentDidMount = async () => {
 		let { props } = this
 		let { location, forms, dispatch } = props
@@ -83,8 +76,7 @@ export default class Edit extends React.Component {
 		if(reset.response === 200){
 			console.log('it was reset')
 			//Form.set({ name: 'setting', inputs: {}, status: 'success', message: 'Reset.', dispatch })
-
-			dispatch(redirect('ADMIN', 'settings'))
+			window.location.href = '/'
 		}
 	}
 
@@ -92,11 +84,9 @@ export default class Edit extends React.Component {
  	sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 	onSubmit = async (values) => {
-	  await this.sleep(300);
-	  window.alert(JSON.stringify(values, 0, 2))
-
-		console.log('fields', values)
 		this.updateModel(values)
+		window.location.href = '/'
+
 
 	}
 
@@ -106,9 +96,9 @@ export default class Edit extends React.Component {
 		file = _.replace(file, '.json', '')
 		let restore = await fetchData('/api/settings/restore/'+file)
 		if(restore.response == 200){
-			console.log('it was restored')
+				window.location.href = '/'
 		//	dispatch(redirect('ADMIN', 'settings'))
-		return { [FORM_ERROR]: <div className={`alert alert-danger`}>Updating Failed.</div> }
+		//return { [FORM_ERROR]: <div className={`alert alert-danger`}>Updating Failed.</div> }
 		}
 	}
 
@@ -135,87 +125,61 @@ export default class Edit extends React.Component {
 			      }}
 						render={({ values, handleSubmit, pristine, invalid }) => (
 							<form onSubmit={handleSubmit}>
+								<div className='row'>
+									<div className='col-6'>
+										<h2>Setup</h2>
+										<p className='mb-5'>Hi, it looks like you haven't set up your shop yet. Please start a new store or restore a previous database.</p>
+									</div>
+									<div className='col-6'>
+										<Card
+											className='mb-5 shadow'
+											body={[
+												<h6 className='class-title'>Start New</h6>,
+												<div className='row'>
+													<div className="form-group col-12">
+														<div>
 
+															<Field name="name">
+																{({ input, meta }) => [
+																		<label>Shop Name</label>,
+																		<input type="text" {...input} placeholder="Name" className={`form-control`} />,
+																		meta.touched && meta.error && <span>{meta.error}</span>,
+																]}
+															</Field>
+														</div>
+													</div>
+													<div className="form-group col-12">
+														<button type="submit" className={`form-control btn-primary btn`} disabled={pristine || invalid}>
+															Submit
+														</button>
+													</div>
+												</div>
+											]}
+										/>
+										<Card
+									    className='mb-4'
+									    body={[
+												<h6 className='class-title'>Restore Previous</h6>,
+												<div className='row'>
+													<div className="form-group col-12">
+															<label>Backup Files</label>
+															<Field name="restore_files" component="select" className={`form-control`}>
+																<option/>
+																{
+																	this.props.models.settings && this.props.models.settings.restore_files && this.props.models.settings.restore_files.map((each, index) => (
+																	<option value={each} key={index}>{each}</option>
+																))}
+															</Field>
+													</div>
+													<div className="form-group col-12">
+															<a href="#" className="btn btn-success" onClick={() => { this.restoreBackup(values.restore_files) }}>Restore</a>
+													</div>
+												</div>
 
-								<h2 className={`font-weight-light`}>Hi, welcome.</h2>
-								<p className={'mb-5'}>Please setup your store.</p>
+									    ]}/>
+									</div>
+								</div>
 
-								<ul className="nav nav-tabs nav-fill header-tabs mb-5">
-									<li className="nav-item">
-										<a href="#!" className="nav-link active">
-											Shop
-										</a>
-									</li>
-									<li className="nav-item">
-										<a href="#!" className="nav-link">
-											Rates
-										</a>
-									</li>
-									<li className="nav-item">
-										<a href="#!" className="nav-link">
-											Integrations
-										</a>
-									</li>
-									<li className="nav-item">
-										<a href="#!" className="nav-link">
-											Account
-										</a>
-									</li>
-								</ul>
-
-								<Card
-									className='mb-4'
-									header={
-										<div className='card-title col-12 mb-0'>
-											Shop {_.capitalize(page)}
-										</div>
-									}
-
-									body={[
-										<div className="form-group col-12">
-											<div>
-
-												<Field name="name">
-													{({ input, meta }) => [
-															<label>Shop Name</label>,
-															<input type="text" {...input} placeholder="Name" className={`form-control`} />,
-															meta.touched && meta.error && <span>{meta.error}</span>,
-													]}
-												</Field>
-											</div>
-										</div>,
-										<div className="form-group col-12">
-											<button type="submit" className={`form-control btn-primary btn`} disabled={pristine || invalid}>
-												Submit
-											</button>
-										</div>,
-									]}
-								/>
-
-								<Card
-							    className='mb-4'
-							    header={[
-							      <div className='card-title col-6 mb-0'>
-							        Restore
-							      </div>
-							    ]}
-							    body={[
-										<div className="form-group col-12">
-												<label>Backup Files</label>
-												<Field name="restore_files" component="select" className={`form-control`}>
-													<option/>
-													{
-														this.props.models.settings && this.props.models.settings.restore_files && this.props.models.settings.restore_files.map((each, index) => (
-														<option value={each} key={index}>{each}</option>
-													))}
-												</Field>
-										</div>,
-										<div className="form-group col-12">
-												<a href="#" className="btn btn-success" onClick={() => { this.restoreBackup(values.restore_files) }}>Restore</a>
-
-										</div>,
-
-							    ]}/>
 							</form>
 						)}
 					/>

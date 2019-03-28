@@ -16,7 +16,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 import { Stripe } from 'stripe'
 
-let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
+let stripe = Stripe('sk_live_iT51vSCZzoB1yq1SbtHIgDTM');
 
 /**
  * Get all model
@@ -72,7 +72,7 @@ export function getByUserId(req, res, next){
   Guest.findOne({ user_id: req.params.id }, async function (error, model) {
     if (error || !model) {
       return res.status(400).json({ status: 'error', response: 401, message: 'Error with finding single model. '+error});
-    } 
+    }
     else {
      return res.status(200).json({ status: 'success', response: 200, message: 'Found single model.', data: model });
     }
@@ -86,7 +86,7 @@ export function getOne(req, res, next){
     Guest.findOne({ '_id': req.params.id }, async function (error, model) {
       if (error || !model) {
           return res.status(400).json({ status: 'error', response: 401, message: 'Error with finding single model. '+error});
-        } 
+        }
         else {
           return res.status(200).json({ status: 'success', response: 200, message: 'Found single model.', data: model });
         }
@@ -99,7 +99,7 @@ export function remove(req, res, next){
       if (error || !model) {
         return res.status(400).json({ status: 'error', response: 401, message: 'Error with model delete. '+error});
       } else {
-       
+
         return res.status(200).json({ status: 'success', response: 200, message: 'Success with delete.'});
       }
     })

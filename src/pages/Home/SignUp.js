@@ -19,7 +19,7 @@ const SignUp = () =>
             <div className='col-6'>
               <div className='row d-flex flex-column pb-4' style={{ flex: '1 1', height: '100%' }}>
                 <div className='col-12 d-flex justify-content-center align-items-center flex-column' style={{ flex: '1 1' }}>
-                  <h1 className='mb-5 font-weight-light'>Sign Up</h1>
+                  <h1 className='mb-5'>Sign Up</h1>
                   <p className='mb-5'>Create an account now to track your orders.</p>
                   <a href='/register' className='btn btn-outline-primary btn-lg'>Create an account</a>
                 </div>
