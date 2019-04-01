@@ -14,7 +14,7 @@ import formidable from 'formidable'
 const fs = require('fs');
 import { Stripe } from 'stripe'
 
-let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
+let stripe = Stripe('');
 
 export function getByPagination(req, res) {
 
@@ -275,8 +275,8 @@ export function resendVerifyEmail(req, res, next) {
 
           let auth = {
             auth: {
-              api_key: 'key-040c7266fbe55eb75787645fb72165d2',
-              domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+              api_key: '',
+              domain: ''
             },
           }
           const email = new Email()
@@ -353,7 +353,7 @@ export function forgotPassword(req, res, next) {
 
           let auth = {
             auth: {
-              api_key: 'key-040c7266fbe55eb75787645fb72165d2',
+              api_key: '',
               domain: 'inhertia.com'
             },
           }
@@ -547,8 +547,8 @@ export function register(req, res, next) {
                 /*
                 let auth = {
                   auth: {
-                    api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
-                    domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+                    api_key: '',
+                    domain: ''
                   },
                 }
                 const email = new Email()

@@ -3,8 +3,8 @@ var api = require('instagram-node').instagram();
 //ig.use({ access_token: 'YOUR_ACCESS_TOKEN' });
 
 api.use({
-  client_id: '4ce47d4142ee42138e46390f3830075c',
-  client_secret: '5b0e3230050c48678dc889f376f6a70e'
+  client_id: '',
+  client_secret: ''
 })
 
 let redirect_uri = 'http://192.168.99.100:3000/api/instagram/handleauth'
@@ -18,7 +18,7 @@ export function getAll(req, res) {
 console.log('got here1')
 
     api.use({
-     access_token : '12103251818.1677ed0.aee12f1f329d4021a4ad6d166e800ec4'
+     access_token : ''
     })
 
     api.user_media_recent('12103251818', function(err, result, pagination, remaining, limit) {

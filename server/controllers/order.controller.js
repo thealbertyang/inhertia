@@ -22,7 +22,7 @@ import formidable from 'formidable'
 const util = require('util');
 var ObjectID = require('mongodb').ObjectID;
 
-let stripe = Stripe('sk_test_j3lePUHaf2fguMotCLXrQMHx');
+let stripe = Stripe('');
 
 let mapInputsToModel = (req) => ({
   stripe_id: req.body.stripe_id.value,
@@ -328,7 +328,7 @@ var form = new formidable.IncomingForm(),
           else {
             let auth = {
               auth: {
-                api_key: 'key-040c7266fbe55eb75787645fb72165d2',
+                api_key: '',
                 domain: 'inhertia.com'
               },
             }
@@ -554,7 +554,7 @@ var form = new formidable.IncomingForm(),
           else {
             let auth = {
               auth: {
-                api_key: 'key-040c7266fbe55eb75787645fb72165d2',
+                api_key: '',
                 domain: 'inhertia.com'
               },
             }

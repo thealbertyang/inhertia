@@ -230,35 +230,6 @@ export function register(req, res, next) {
                   return res.status(400).json({ status: 'error', message: 'Registration failed. Some fields are missing.', response: 400, data: { ...inputs, password_confirm: { value: '', error: 'This is required' } } })
                 }
                 else {
-                    /*let auth = {
-                      auth: {
-                        api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
-                        domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
-                      },
-                    }
-                    const email = new Email()
-                    let html = await email.render('user_created_verify/html', {
-                      name: fields.firstName,
-                      url: process.env.URL,
-                      token: jwtToken,
-                      email: fields.email,
-                    })
-                    let nodemailerMailgun = nodemailer.createTransport(mg(auth));
-
-                    nodemailerMailgun.sendMail({
-                      from: '"👻" <no-reply@thealbertyang.com>', // sender address
-                      to: 'thealbertyang@gmail.com', // list of receivers
-                      subject: 'Complete your account sign up',
-                      html: html,
-                      text: 'Mailgun rocks, pow pow!'
-                    }, function (err, info) {
-                      if (err) {
-                        console.log('Error: ' + err);
-                      }
-                      else {
-                        console.log('Response: ' + info);
-                      }
-                    })*/
 
                     jwtToken = jwt.sign({ id: user._id, username: user.username, first_name: user.first_name, role: user.role, verifyEmail: user.verifyEmail }, 'real');
                     const cookie = req.cookies.jwtToken
@@ -360,8 +331,8 @@ export function create(req, res, next) {
                 else {
                     let auth = {
                       auth: {
-                        api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
-                        domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+                        api_key: '',
+                        domain: ''
                       },
                     }
                     const email = new Email()
@@ -460,8 +431,8 @@ export function create(req, res, next) {
 
                           let auth = {
                             auth: {
-                              api_key: '229e2f96299f7a12133128efaa076ba6-115fe3a6-f7a8c05c',
-                              domain: 'sandbox3610fc12f99a4cd29c639d2654c4ccc5.mailgun.org'
+                              api_key: '',
+                              domain: ''
                             },
                           }
                           const email = new Email()

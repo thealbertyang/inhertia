@@ -1,9 +1,10 @@
-<a href="https://codesandbox.io/s/github/faceyspacey/redux-first-router-codesandbox" target="_blank">
-  <img alt="Edit Redux-First Router Demo" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+<a href="https://inhertia.com" target="_blank">
+  <img alt="Inhertia" src="https://inhertia.com/img/logo.png">
 </a>
 
 
-# Universal Demonstration of [Redux-First Router](https://github.com/faceyspacey/redux-first-router)
+# Store build with [Redux-First Router](https://github.com/faceyspacey/redux-first-router)
+
 
 This demo specializes in SSR and the sort of things like redirecting and authentication you will do on the server. For the simpler example that's easier to start with, check out the [Redux-First Router Boilerplate](https://github.com/faceyspacey/redux-first-router-boilerplate).
 
@@ -41,9 +42,9 @@ yarn start
 - [***server/configureStore.js***](./server/configureStore.js) - ***(this is the gem of the repo -- observe how to filter authentication)***
 
 ## Notes
-I comment throughout the code various things you can try. Look out for comments starting with *"TRY:"* and *"TASK:"*. 
+I comment throughout the code various things you can try. Look out for comments starting with *"TRY:"* and *"TASK:"*.
 
-For example, there are simple values like the `jwToken` you can toggle to get access to the restricted *admin* area. That showcases a key feature: ***authentication filtering.*** 
+For example, there are simple values like the `jwToken` you can toggle to get access to the restricted *admin* area. That showcases a key feature: ***authentication filtering.***
 
 In general, this Demo is all about SSR. It shows how to use the `onBeforeChange` to properly authenticate user's and routes using *JSON Web Tokens*. And of course data-fetching via `thunks` is central to it all. **There's even a real API.**
 

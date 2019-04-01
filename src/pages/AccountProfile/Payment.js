@@ -39,7 +39,7 @@ export default class Payment extends React.Component {
 	state = { stripe: null }
 
 	componentDidMount = async () => {
-    this.setState({ stripe: window.Stripe('pk_test_vixzu5CoMlSioGsG2IgGD2Z4') });
+    this.setState({ stripe: window.Stripe('') });
   }
 
 

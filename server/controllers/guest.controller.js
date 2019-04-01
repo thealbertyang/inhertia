@@ -16,7 +16,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 import { Stripe } from 'stripe'
 
-let stripe = Stripe('sk_live_iT51vSCZzoB1yq1SbtHIgDTM');
+let stripe = Stripe('');
 
 /**
  * Get all model

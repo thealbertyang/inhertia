@@ -30,7 +30,7 @@ export default class Shipping extends React.Component {
 	}
 
 	componentDidMount = async () => {
-		this.setState({ stripe: window.Stripe('pk_test_vixzu5CoMlSioGsG2IgGD2Z4') });
+		this.setState({ stripe: window.Stripe('') });
 
 		let { props } = this
 		let { dispatch } = props
